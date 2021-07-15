@@ -34,9 +34,10 @@ export class InlSignupComponent implements OnInit {
       this.router.navigate(['/dashboard']);
     }
     this.myForm = this.fb.group({
-      nin: ['', Validators.required],
-      firstName: [null, Validators.required],
-      lastName: [null, Validators.required],
+      bvn: ['', Validators.required],
+      dob: ['', Validators.required],
+      // firstName: [null, Validators.required],
+      // lastName: [null, Validators.required],
     });
   }
 
@@ -46,6 +47,7 @@ export class InlSignupComponent implements OnInit {
     this.displayErrors();
   }
   onSubmit() {
+    // console.log(this.myForm.value);
     this.APIResponse = true; this.submitting = true;
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
@@ -55,8 +57,7 @@ export class InlSignupComponent implements OnInit {
       return;
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
-    console.log(fd);
-    this.api.post('/api/v1/verifications/nin', fd, false)
+    this.api.post('/api/v1/verifications/bvn', fd, false)
       .subscribe(response => {
         this.APIResponse = false; this.submitting = false;
         this.authService.signup$.next(response.data);
@@ -64,11 +65,18 @@ export class InlSignupComponent implements OnInit {
       },
       errResp => {
         this.APIResponse = false; this.submitting = false;
-        Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+        if(errResp?.status === 503) {
+          Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
+        } else {
+          Swal.fire('Oops...', errResp?.error?.error?.message, 'error');
+        }
       });
   }
 
   displayErrors() {
+    Object.keys(this.formErrors).forEach((control) => {
+      this.formErrors[control] = '';
+    });
     Object.keys(this.errors).forEach((control) => {
       Object.keys(this.errors[control]).forEach(error => {
         this.uiErrors[control] = ValidationMessages[control][error];

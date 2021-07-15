@@ -1,14 +1,26 @@
-<div class="container_custom">
-  <div class="left-box">
-    <div>
-      <img src="/assets/images/login-logo.png" alt="">
+<div class="row h-100">
+  <div class="col-md-6">
+    <div class="container h-100">
+      <div class="row align-items-center h-100">
+        <div class="col-md-12 text-center">
+          <img src="/assets/images/login-logo.png" class="img-fluid" height="auto" width="500" alt="">
+          <p>...Delivering Results</p>
+        </div>
+      </div>
     </div>
-    <p>A platform that works for you</p>
   </div>
 
-  <div class="right-box">
-    <div style="width: 60%;">
-      <router-outlet></router-outlet>
+  <div class="col-md-6">
+    <div class="container h-100 p-3">
+      <div class="row align-items-center h-100">
+        <div class="col-md-8 offset-md-2">
+          <div class="card auth-card font-weight-bolder">
+            <div class="card-body p-4" style="font-size: 1em;">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 
 import { ApiService } from '@app/_shared/services/api.service';
 import { FormErrors, ValidationMessages } from './profile.validators';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'in-profile',
@@ -44,6 +45,7 @@ export class ProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
+    private datePipe: DatePipe
     ) { }
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class ProfileComponent implements OnInit {
           lastName: [{value: user.lastName, disabled:true}, [Validators.required]],
           country: [{value: this.container.countries[0], disabled:true}, [Validators.required]],
           email: [{value: user.email, disabled:true}, [Validators.required]],
-          dob: [{value: dob, disabled:true}, [Validators.required]],
+          dob: [{value: this.datePipe.transform(dob, 'dd-MMM-yyyy'), disabled:true}, [Validators.required]],
           phone: [{value: user.phone, disabled:true}, [Validators.required]],
         });
         if(user.image) {

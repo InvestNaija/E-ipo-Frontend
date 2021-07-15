@@ -60,7 +60,7 @@ export class InlForgotPasswordComponent implements OnInit {
         this.APIResponse = false; this.submitting = false;
         Swal.fire('', response?.message, 'success');
         // if (this.auth.redirectUrl) {
-        //   this.router.navigate([this.auth.redirectUrl]);
+          this.router.navigateByUrl('/');
         //   this.auth.redirectUrl = '';
         // } else {
         //   this.router.navigate(['/dashboard']);

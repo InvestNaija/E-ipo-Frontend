@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { InlDashboardRoutingModule } from './inl-dashboard-routing.module';
 import { InlDashboardComponent } from './inl-dashboard.component';
@@ -34,6 +34,9 @@ import { SharedModule } from '../_shared/shared.module';
     MatToolbarModule,
     MatFormFieldModule,
     MatInputModule
-  ]
+  ],
+  providers: [
+    DatePipe,
+  ],
 })
 export class InlDashboardModule { }

@@ -18,7 +18,7 @@ export class ApplicationContextService {
   public set userInformation(value) {
     this._userInformation = value;
     this._userInformationObs.next(value);
-    localStorage.setItem('learnin-cp-dashboard-refresh', btoa(JSON.stringify(value)));
+    // localStorage.setItem('learning-cp-dashboard-refresh', btoa(JSON.stringify(value)));
   }
 
   public get userInformation() {
@@ -26,9 +26,9 @@ export class ApplicationContextService {
   }
 
   userInformationObs(): Observable<any> {
-    if(localStorage.getItem('learnin-cp-dashboard-refresh')) {
-      this._userInformationObs.next(JSON.parse(atob(localStorage.getItem('learnin-cp-dashboard-refresh'))));
-    }
+    // if(localStorage.getItem('learning-cp-dashboard-refresh')) {
+    //   this._userInformationObs.next(JSON.parse(atob(localStorage.getItem('learning-cp-dashboard-refresh'))));
+    // }
     return this._userInformationObs.asObservable();
   }
 
@@ -71,6 +71,10 @@ export class ApplicationContextService {
               this.router.navigateByUrl(`/dashboard/transactions/${txn.id}/${txn.asset.id}/make-payment`)
             }
           });
+  }
+
+  deleteTransaction(transaction){
+
   }
 
 }

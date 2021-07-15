@@ -23,6 +23,7 @@ export class InlVerifyOtpComponent implements OnInit, OnDestroy {
   validationMessages = ValidationMessages;
   container: any = {};
   resending = false;
+  APIResponse = false; submitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +34,7 @@ export class InlVerifyOtpComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(this.commonServices.email)]],
       otp: [null, [Validators.required, Validators.minLength(6)]],
     });
     this.signupSub = this.authService.signUp().subscribe(
@@ -79,18 +80,19 @@ export class InlVerifyOtpComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // this.APIResponse = false; this.submitting = true;
+    this.APIResponse = false; this.submitting = true;
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
       this.displayErrors();
+      this.APIResponse = false; this.submitting = false;
       return;
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
     console.log(fd);
-    // this.APIResponse = false; this.submitting = false;
     this.apiService.post('/api/v1/auth/customers/verify-otp', fd, false)
       .subscribe(response => {
+        this.APIResponse = false; this.submitting = false;
         this.authService.signup$.next(response.data);
         this.router.navigate(['/auth/login']);
         Swal.fire('', response?.message, 'success');
@@ -98,6 +100,7 @@ export class InlVerifyOtpComponent implements OnInit, OnDestroy {
         }, 2000)
       },
       errResp => {
+        this.APIResponse = false; this.submitting = false;
         Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
       });
   }

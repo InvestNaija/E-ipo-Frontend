@@ -1,55 +1,47 @@
-
-<div class="form-box">
-  <div class="header">
-    <p>Create Account</p>
-    <a routerLink="/auth/login">
+<div class="row mb-3">
+  <div class="col-md-12">
+    <a routerLink="/auth/login" class="pull-right text-primary">
       Login Instead >
     </a>
+    <h1>Create Account</h1>
+    <!-- <p></p> -->
   </div>
-  <span class="subtitle">Sign up with your NIN to help you get started
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  </span>
-
-  <div class="form">
-    <div class="course-form">
-      <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-        <div class="row">
-          <div class="form-group col-md-12 inl-form-input">
-            <label for="email" *ngIf="myForm.get('nin').value">NIN</label>
-            <input formControlName="nin" type="email" placeholder="NIN" (keyup)="controlChanged('nin')" />
-            <span *ngIf="uiErrors.nin != ''">{{uiErrors.nin }}</span>
-          </div>
+</div>
+<div class="row mb-5">
+  <div class="col-md-12">
+    <span class="text-muted font-weight-bold">Sign up with your BVN to help you get started</span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email" *ngIf="myForm.get('bvn').value">BVN</label>
+        <input id="email" formControlName="bvn" class="form-control" type="text" placeholder="BVN" (keyup)="controlChanged('bvn')" />
+        <span *ngIf="uiErrors.bvn != ''">{{uiErrors.bvn }}</span>
+      </div>
+      <div class="form-group">
+        <label for="dob" *ngIf="myForm.get('dob').value">Date of Birth</label>
+        <input id="dob" formControlName="dob" class="form-control" type="date" placeholder="Date Of Birth" (keyup)="controlChanged('dob')" />
+        <span *ngIf="uiErrors.bvn != ''">{{uiErrors.bvn }}</span>
+      </div>
+        <!-- <div class="form-group">
+          <label for="email" *ngIf="myForm.get('firstName').value">First Name</label>
+          <input formControlName="firstName" class="form-control" type="text" placeholder="First Name" (keyup)="controlChanged('firstName')" />
+          <span *ngIf="uiErrors.firstName != ''">{{uiErrors.firstName }}</span>
         </div>
-        <div class="row">
-          <div class="form-group col-md-12 inl-form-input">
-            <label for="email" *ngIf="myForm.get('firstName').value">First Name</label>
-            <input formControlName="firstName" type="text" placeholder="First Name" (keyup)="controlChanged('firstName')" />
-            <span *ngIf="uiErrors.firstName != ''">{{uiErrors.firstName }}</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-12 inl-form-input">
-            <label for="email" *ngIf="myForm.get('lastName').value">Surname</label>
-            <input formControlName="lastName" type="text" placeholder="Surname" (keyup)="controlChanged('lastName')" />
-            <span *ngIf="uiErrors.lastName != ''">{{uiErrors.lastName }}</span>
-          </div>
-        </div>
-        <div class="row buttons-arrange">
-          <div class="form-group col-md-6">
-            <button type="submit" class="btn btn-danger">
-              <span *ngIf="!submitting">Continue</span>
-              <mat-spinner *ngIf="submitting" color="accent" [diameter]="30"></mat-spinner>
-            </button>
-          </div>
-          <div class="form-group col-md-6 text-right">
-            <!-- <input type="submit" value="Login" alt="" /> -->
-            <!-- <strong><a routerLink="/auth/forgot-password">Reset Password</a></strong> -->
-          </div>
-        </div>
-        <!-- <div class="buttons-arrange">
-          <input type="submit" value="Continue" alt="" />
+        <div class="form-group">
+          <label for="email" *ngIf="myForm.get('lastName').value">Surname</label>
+          <input formControlName="lastName" class="form-control" type="text" placeholder="Surname" (keyup)="controlChanged('lastName')" />
+          <span *ngIf="uiErrors.lastName != ''">{{uiErrors.lastName }}</span>
         </div> -->
-      </form>
-    </div>
+        <div class="form-group">
+          <!-- <strong class="pull-right"><a routerLink="/auth/forgot-password" class="text-primary">Reset Password</a></strong> -->
+          <button type="submit" class="auth-button">
+            <span *ngIf="!submitting">Continue</span>
+            <mat-spinner *ngIf="submitting"  [diameter]="30"></mat-spinner>
+          </button>
+        </div>
+    </form>
   </div>
 </div>

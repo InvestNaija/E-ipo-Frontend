@@ -1,39 +1,36 @@
-
-<div class="form-box">
-  <div class="header">
-    <p>Login</p>
-    <a routerLink="/auth/signup">
+<div class="row mb-3">
+  <div class="col-md-12">
+    <a routerLink="/auth/signup" class="pull-right text-primary">
       Create an account
     </a>
+    <h1>Login</h1>
   </div>
-  <span class="subtitle">Sign in with your email account and password</span>
-  <div class="form">
+</div>
+<div class="row mb-5">
+  <div class="col-md-12">
+    <span class="text-muted font-weight-bold">Sign in with your email and password</span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-      <div class="row">
-        <div class="form-group col-md-12">
-          <label for="email" *ngIf="myForm.get('email').value">Email</label>
-          <input formControlName="email" id="email" type="email" placeholder="Email" (keyup)="controlChanged('email')" />
-          <span *ngIf="uiErrors.email">{{uiErrors.email }}</span>
-        </div>
+      <div class="form-group">
+        <label for="email" *ngIf="myForm.get('email')?.value">Email</label>
+        <input formControlName="email" id="email" class="form-control" type="email" placeholder="Email" (keyup)="controlChanged('email')" />
+        <span class="form-text" *ngIf="uiErrors.email">{{uiErrors.email }}</span>
       </div>
-      <div class="row">
-        <div class="form-group col-md-12">
-          <label for="email" *ngIf="myForm.get('password').value">Password</label>
-          <input formControlName="password" type="password" placeholder="Password" (keyup)="controlChanged('password')" />
-          <span *ngIf="uiErrors.password">{{uiErrors.password }}</span>
-        </div>
+      <div class="form-group">
+        <label for="email" *ngIf="myForm.get('password')?.value">Password</label>
+        <input formControlName="password" type="password" class="form-control" placeholder="Password" (keyup)="controlChanged('password')" />
+        <span *ngIf="uiErrors.password">{{uiErrors.password }}</span>
       </div>
 
-      <div class="row buttons-arrange">
-        <div class="form-group col-md-6">
-          <button type="submit" class="btn btn-danger">
-            <span *ngIf="!submitting">Login</span>
-            <mat-spinner *ngIf="submitting" color="accent" [diameter]="30"></mat-spinner>
-          </button>
-        </div>
-        <div class="form-group col-md-6 text-right">
-          <strong><a routerLink="/auth/forgot-password">Reset Password</a></strong>
-        </div>
+      <div class="form-group">
+        <strong class="pull-right"><a routerLink="/auth/forgot-password" class="text-primary">Reset Password</a></strong>
+        <button type="submit" class="auth-button">
+          <span *ngIf="!submitting">Login</span>
+          <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
+        </button>
       </div>
     </form>
   </div>

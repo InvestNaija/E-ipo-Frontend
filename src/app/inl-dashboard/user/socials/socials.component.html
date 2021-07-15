@@ -1,4 +1,7 @@
-<div class="row m-2">
+<ng-template #loading>
+  <mat-spinner [diameter]="60"></mat-spinner>
+</ng-template>
+<div class="row m-2" *ngIf="!(commonServices.isLoading$ | async); else loading">
   <div class="socials-form-container col-12">
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
       <div class="row">
@@ -32,15 +35,15 @@
         </div>
         <div class="form-group col-md-6">
           <label for="inputEmail4">Youtube</label>
-          <input formControlName="youtube" type="password" class="form-control" placeholder="Youtube">
+          <input formControlName="youtube" type="text" class="form-control" placeholder="Youtube">
           <span *ngIf="uiErrors.youtube">{{uiErrors.youtube}}</span>
         </div>
         <div class="form-group col-md-6">
         </div>
         <div class="form-group col-md-12">
-          <button mat-flat-button type="submit" class="btn btn-primary submit-password-form" [disabled]="submitting">
-            <span *ngIf="!submitting">Update Social Links</span>
-            <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
+          <button mat-flat-button type="submit" class="auth-button" [disabled]="container['submitting']">
+            <span *ngIf="!container['submitting']">Update Social Links</span>
+            <mat-spinner *ngIf="container['submitting']" [diameter]="30"></mat-spinner>
           </button>
         </div>
       </div>

@@ -1,0 +1,47 @@
+<ng-template #loading>
+  <mat-spinner [diameter]="60"></mat-spinner>
+</ng-template>
+<div class="row m-3 mt-5" *ngIf="!(commonServices.isLoading$ | async); else loading">
+  <div class="socials-form-container col-12">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="name" *ngIf="myForm.get('name')?.value">Name of Next of Kin</label>
+          <input formControlName="name" type="text" class="form-control"
+            placeholder="Enter name of Next of Kin" (keyup)="controlChanged('name')">
+          <span *ngIf="uiErrors.name">{{uiErrors.name}}</span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="relationship" *ngIf="myForm.get('relationship')?.value">Relationship</label>
+          <input formControlName="relationship" type="text" class="form-control"
+            placeholder="Relationship (e.g son, daughter, etc)" (keyup)="controlChanged('relationship')">
+          <span *ngIf="uiErrors.relationship">{{uiErrors.relationship}}</span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address" *ngIf="myForm.get('address')?.value">Address</label>
+          <input formControlName="address" type="text" class="form-control"
+            placeholder="Address" (keyup)="controlChanged('address')">
+          <span *ngIf="uiErrors.address">{{uiErrors.address}}</span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="phoneNumber" *ngIf="myForm.get('phoneNumber')?.value">Phone Number</label>
+          <input formControlName="phoneNumber" type="text" class="form-control"
+             placeholder="Enter Phone Number" (keyup)="controlChanged('phoneNumber')">
+          <span *ngIf="uiErrors.phoneNumber">{{uiErrors.phoneNumber}}</span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="email" *ngIf="myForm.get('email')?.value">Email</label>
+          <input formControlName="email" type="text" class="form-control"
+            placeholder="Email" (keyup)="controlChanged('email')">
+          <span *ngIf="uiErrors.email">{{uiErrors.email}}</span>
+        </div>
+        <div class="form-group col-md-6">
+          <button mat-flat-button type="submit" class="auth-button pull-right" [disabled]="container['submitting']">
+            <span *ngIf="!container['submitting']">Update Next of Kin</span>
+            <mat-spinner *ngIf="container['submitting']" [diameter]="30"></mat-spinner>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

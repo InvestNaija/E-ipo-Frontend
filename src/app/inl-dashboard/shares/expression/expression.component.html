@@ -3,7 +3,7 @@
     <div class="col-12">
       <a [routerLink]="['/dashboard/index']" class="text-dark text-decoration-none">< Back</a>
       <div class="page-title">
-        <h1>Shares</h1>
+        <h1>{{share?.name}}</h1>
       </div>
     </div>
   </div>
@@ -13,14 +13,14 @@
         <div class="card-body">
           <mat-spinner *ngIf="commonServices.isLoading$ | async" color="accent" [diameter]="30"></mat-spinner>
 
-          <h3 class="card-title mb-3">Order Summary</h3>
+          <h3 class="card-title mb-3">Enter your transaction details</h3>
           <div class="row">
             <div class="col-12">
               <div class="border-bottom p-3">
                 <div class="d-flex">
-                  <img [src]="share?.image" style="height: 60px;">
+                  <img [src]="share?.image" alt="{{share?.name}}" style="height: 70px;">
                   <div class="ml-2" style="margin-left: 10px;">
-                    <h6 class="m-0 font-weight-bold">{{share?.name}}</h6>
+                    <h3 class="font-weight-bold text-muted mb-1">{{share?.name}}</h3>
                     <p class="m-0">{{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}} - {{share?.anticipatedMaxPrice | currency:share?.currency:"symbol-narrow"}}</p>
                     <p class="m-0 text-success font-weight-bold">+0 (+0%)</p>
                   </div>
@@ -32,36 +32,45 @@
             <div class="row border-bottom py-3">
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
+                  <p class="text-muted font-weight-bold">Offering Type</p>
                   <input formControlName="type" class="form-control" type="text" placeholder="Offering Type" />
                   <span *ngIf="uiErrors.type">{{uiErrors.type}}</span>
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
+                  <p class="text-muted font-weight-bold">Asset Price ({{share?.currency}})</p>
                   <input formControlName="sharePrice" class="form-control" type="text" placeholder="Asset Price" />
                   <span *ngIf="uiErrors.sharePrice">{{uiErrors.sharePrice}}</span>
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
-                  <input formControlName="units" class="form-control" type="number" placeholder="Specified Units" />
-                  <span *ngIf="uiErrors.units">{{uiErrors.units}}</span>
+                  <p class="text-muted font-weight-bold">Estimated Amount</p>
+                  <input formControlName="amount" class="form-control" type="number" [min]="share?.anticipatedMinPrice" (keyup)="amountChanged('amount')" placeholder="Estimated Amount" />
+                  <span *ngIf="uiErrors.amount">{{uiErrors.amount}}</span>
+                  <span *ngIf="errors['amount']?.min">Amount cannot be less than {{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}}.</span>
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
-                  <input formControlName="amount" class="form-control" type="text" placeholder="Estimated Amount" />
-                  <span *ngIf="uiErrors.amount">{{uiErrors.amount}}</span>
+                  <p class="text-muted font-weight-bold">Specified Units</p>
+                  <input formControlName="units" class="form-control" type="number" (keyup)="unitsChanged('units')" placeholder="Specified Units" />
+                  <span *ngIf="uiErrors.units">{{uiErrors.units}}</span>
                 </div>
               </div>
             </div>
             <div class="form-group border-bottom px-5 py-2">
-              <p class="text-muted font-weight-bold">Price per Share</p>
+              <p class="text-muted font-weight-bold">Total</p>
               <h1><small>{{myForm.get('amount').value | currency:share?.currency:'symbol-narrow' }}</small></h1>
             </div>
             <div class="form-group border-bottom py-3">
-              <button class="btn btn-danger w-100 text-white" type="submit">
-                <span> Make Payment </span>
+              <!-- <button class="btn btn-danger w-100 text-white" type="submit">
+                <span>  </span>
+              </button> -->
+              <button type="submit" class="auth-button w-100">
+                <span *ngIf="!submitting">Proceed to make payment >></span>
+                <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
               </button>
             </div>
           </form>

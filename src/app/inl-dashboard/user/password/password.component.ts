@@ -38,21 +38,32 @@ export class PasswordComponent implements OnInit {
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
-      Object.keys(this.errors).forEach((control) => {
-        Object.keys(this.errors[control]).forEach(error => {
-          this.uiErrors[control] = ValidationMessages[control][error];
-        })
-      })
+      this.displayErrors();
+      // this.formErrors
+      // let displayErrors: any;
+      // {this.formErrors, this.uiErrors} = this.commonServices.displayErrors(this.formErrors, ValidationMessages, this.errors, this.uiErrors);
+      this.submitting = false;
       return;
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
     this.apiService.post('/api/v1/auth/customers/change-password', fd)
       .subscribe(response => {
+        this.submitting = false;
         Swal.fire('Great!', response?.message, 'success')
       },
       errResp => {
         this.submitting = false;
         Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
       });
+  }
+  displayErrors() {
+    Object.keys(this.formErrors).forEach((control) => {
+      this.formErrors[control] = '';
+    });
+    Object.keys(this.errors).forEach((control) => {
+      Object.keys(this.errors[control]).forEach(error => {
+        this.uiErrors[control] = ValidationMessages[control][error];
+      })
+    });
   }
 }

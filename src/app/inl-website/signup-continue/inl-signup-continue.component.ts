@@ -40,7 +40,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
       gender: [null, Validators.required],
       phone: [null, Validators.required],
       birthdate: [null, Validators.required],
-      email: [null, [Validators.required, Validators.email]],
+      email: [null, [Validators.required, Validators.pattern(this.commonServices.email)]],
       photo: [null],
       address: [null],
       nin: [null],
@@ -55,7 +55,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
         ]
       ],
       confirmPassword: [null, Validators.required],
-      accept: [false, Validators.requiredTrue]
+      accept: [false]
     },{validators: this.commonServices.mustMatch('password', 'confirmPassword')});
     this.signupSub = this.authService.signUp().subscribe(
       data => {
@@ -68,7 +68,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
 
   populateKYCDetail(kycDetail: KYCDetail) {
     let dob = kycDetail?.birthdate.split("-");
-    const gender = this.gender.find(g => g.id === kycDetail?.gender);
+    const gender = this.gender.find(g => g.name === kycDetail?.gender);
     this.myForm.patchValue({
       firstName: kycDetail?.firstname,
       lastName: kycDetail?.lastname,
@@ -85,16 +85,15 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
     });
   }
 
-
   controlChanged(ctrlName: string) {
     this.errors = this.commonServices.controlnvalid(this.myForm.get(ctrlName) as FormControl);
     this.displayErrors();
   }
+
   onSubmit() {
     this.APIResponse = false; this.submitting = true;
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
-      this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
       this.displayErrors();
       this.APIResponse = true; this.submitting = true;
@@ -102,8 +101,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
     fd.dob = fd.birthdate;
-    fd.confirmPassword = fd.confirmPassword;
-    fd.password = fd.password;
+    fd.nin = Math.floor(10000000000 + Math.random() * 90000000000).toString();
     fd.gender = fd.gender.name
     delete fd.photo;
     delete fd.signature;
@@ -124,13 +122,19 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
       },
       errResp => {
         this.APIResponse = false; this.submitting = false;
-        Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+        if(errResp?.status === 503) {
+          Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
+        } else {
+          Swal.fire('Oops...', errResp?.error?.error?.message, 'error');
+        }
       });
-    // this.APIResponse = false; this.submitting = false;
   }
 
 
   displayErrors() {
+    Object.keys(this.formErrors).forEach((control) => {
+      this.formErrors[control] = '';
+    });
     Object.keys(this.errors).forEach((control) => {
       Object.keys(this.errors[control]).forEach(error => {
         this.uiErrors[control] = ValidationMessages[control][error];

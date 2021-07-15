@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
@@ -9,13 +9,14 @@ import { catchError, concatMap, distinctUntilChanged, map, mergeMap, switchMap }
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 
 @Component({
   selector: 'in-banking-details',
   templateUrl: './banking-details.component.html',
   styleUrls: ['./banking-details.component.scss']
 })
-export class BankingDetailsComponent implements OnInit {
+export class BankingDetailsComponent implements OnInit, AfterViewInit {
   myForm: FormGroup;
   errors = [];
   formErrors = FormErrors;
@@ -23,6 +24,7 @@ export class BankingDetailsComponent implements OnInit {
   validationMessages = ValidationMessages;
   submitting = false; disableButton=false
   container = {};
+
   loadingBankName: boolean;
   bankAccountName: {success: boolean, name: string}
 
@@ -31,42 +33,61 @@ export class BankingDetailsComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     public apiService: ApiService,
+    private appContext: ApplicationContextService,
     public commonServices: CommonService
     ) { }
 
   ngOnInit(): void {
-    this.myForm = this.fb.group({
-      nuban: [null, [Validators.required, Validators.maxLength(10), Validators.pattern(/[0-9]+$/), Validators.minLength(10)]],
-      bankCode: [null, [Validators.required]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
-    });
-    this.myForm.get('nuban').valueChanges
-      .subscribe((nuban: string)  => {
-
-        if(!this.myForm.get('bankCode').value){
-          this.myForm.get('nuban').patchValue( null, {emitEvent: false} );
-          Swal.fire('Oops...', 'Please select a bank first', 'error')
-          return null;;
-        }
-        if(nuban.length === 10) {
-          const chosenBank = this.myForm.get('bankCode').value;
-          this.loadingBankName = true
-          const fd = {
-            bank_code: chosenBank?.code,
-            nuban: nuban
-          }
-          this.apiService.post('/api/v1/verifications/bank-account', fd)
-          .subscribe((resp: any) => {
-              this.loadingBankName = false; this.disableButton = false
-              this.bankAccountName = {success: true, name: resp?.data?.account_name};
-          },
-          errResp => {
-            this.loadingBankName = false; this.disableButton = true
-            console.log(errResp?.error?.error?.message)
-            this.bankAccountName = {success: false, name: errResp?.error?.error?.message};
-          });
-        }
+    this.commonServices.isLoading$.pipe(
+      switchMap(loading => {
+        return this.appContext.userInformationObs();
       })
+    ).subscribe(user => {
+      this.myForm = this.fb.group({
+        nuban: [null, [Validators.required, Validators.maxLength(10), Validators.pattern(/[0-9]+$/), Validators.minLength(10)]],
+        bankCode: [null, [Validators.required]],
+        password: [null, [Validators.required, Validators.minLength(6)]],
+      });
+      if(user.bankCode) {
+        this.myForm.patchValue({
+          bankCode: {code: user.bankCode, name: user.bankName},
+          nuban: user.nuban
+        })
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    this.myForm.patchValue({
+      nuban: []
+    });
+  }
+
+  onNubanChanged() {
+    let nuban = this.myForm.get('nuban').value;
+    if(!this.myForm.get('bankCode').value){
+      this.myForm.get('nuban').patchValue( null, {emitEvent: false} );
+      Swal.fire('Oops...', 'Please select a bank first', 'error')
+      return null;;
+    }
+    if(nuban.length === 10) {
+      const chosenBank = this.myForm.get('bankCode').value;
+      this.loadingBankName = true
+      const fd = {
+        bank_code: chosenBank?.code,
+        nuban: nuban
+      }
+      this.apiService.post('/api/v1/verifications/bank-account', fd)
+      .subscribe((resp: any) => {
+          this.loadingBankName = false; this.disableButton = false
+          this.bankAccountName = {success: true, name: resp?.data?.account_name};
+      },
+      errResp => {
+        this.loadingBankName = false; this.disableButton = true
+        console.log(errResp?.error?.error?.message)
+        this.bankAccountName = {success: false, name: errResp?.error?.error?.message};
+      });
+    }
   }
 
   onSubmit() {

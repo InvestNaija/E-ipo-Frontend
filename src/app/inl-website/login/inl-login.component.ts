@@ -79,7 +79,11 @@ export class InlLoginComponent implements OnInit {
       },
       errResp => {
         this.APIResponse = false; this.submitting = false;
-        Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+        if(errResp?.status === 503) {
+          Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
+        } else {
+          Swal.fire('Oops...', errResp?.error?.error?.message, 'error');
+        }
       });
   }
 

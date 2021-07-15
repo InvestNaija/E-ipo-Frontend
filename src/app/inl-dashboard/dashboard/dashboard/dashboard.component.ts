@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { catchError, finalize, map, startWith, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
+import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { ApiService } from '@app/_shared/services/api.service';
@@ -36,7 +37,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isLoading$ = this.loadingSubject.asObservable();
   topAssets: any;
   bestAsset = {loading: true, value: null};
-  totalPortfolio= {loading: true, value: 0};
+  totalPortfolio= {loading: true, value: []};
 
   constructor(
     private router: Router,
@@ -47,7 +48,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.api.get('/api/v1/assets/top-assets')
       .subscribe(response => {
-        console.log(response)
         this.topAssets = response.data
         this.bestAsset.loading = false
         this.bestAsset.value = response.data.reduce(function(prev, current) {
@@ -75,8 +75,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe(response => {
-        this.totalPortfolio.loading = false
-        this.totalPortfolio.value = response.reduce((a:any, b:any) => a + b.amount, 0);
+        this.totalPortfolio.loading = false;
+        let result = [];
+        response.reduce(function(res, value) {
+          if(value.paid) {
+            if (!res[value.asset.currency]) {
+              res[value.asset.currency] = { currency: value.asset.currency, amount: 0 };
+              result.push(res[value.asset.currency])
+            }
+            res[value.asset.currency].amount += value.amount;
+          }
+          return res;
+        }, {});
+        if(result.length === 0) {
+          result.push({ currency: null, amount: 0 });
+        }
+        this.totalPortfolio.value = result;
         this.loadingSubject.next(false);
         this.dataSource = new MatTableDataSource(response);
 
@@ -90,5 +104,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   onMakePayment(element: any) {
     this.appService.checkCSCS(element);
+  }
+  onDeleteTransaction(element: any) {
+    Swal.fire('Oops...', 'Delete functionality not yet implemented','error');
   }
 }

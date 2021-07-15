@@ -1,22 +1,27 @@
 export const ValidationMessages  = {
-  'nin' : {
-      'required': 'NIN is required',
+  'bvn' : {
+      'required': 'BVN is required',
   },
-  'firstName' : {
-      'required': 'First Name is required',
+  'dob' : {
+      'required': 'Date of birth is required',
   },
-  'lastName' : {
-      'required': 'Surname is required',
-  }
+  // 'firstName' : {
+  //     'required': 'First Name is required',
+  // },
+  // 'lastName' : {
+  //     'required': 'Surname is required',
+  // }
 };
 export let FormErrors = {
-  nin: '',
-  firstName: '',
-  lastName: '',
+  bvn: '',
+  dob: '',
+  // firstName: '',
+  // lastName: '',
 };
 
 export interface KYCDetail {
-  nin: string,
-  firstName: string,
-  lastName: string,
+  bvn: string,
+  dob: string,
+  // firstName: string,
+  // lastName: string,
 }

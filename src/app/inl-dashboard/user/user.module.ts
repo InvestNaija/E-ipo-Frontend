@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { ProfileComponent } from './profile/profile.component';
+import { NoKComponent } from './nok/nok.component';
 import { PasswordComponent } from './password/password.component';
 import { SocialsComponent } from './socials/socials.component';
 import { DocumentsComponent } from './documents/documents.component';
@@ -39,6 +40,7 @@ registerPlugin(
     UserComponent,
     ProfileComponent,
     PasswordComponent,
+    NoKComponent,
     SocialsComponent,
     DocumentsComponent,
     BankingDetailsComponent,

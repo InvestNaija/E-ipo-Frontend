@@ -1,13 +1,17 @@
-<div class="row m-2">
+<ng-template #loading>
+  <mat-spinner [diameter]="60"></mat-spinner>
+</ng-template>
+<div class="row m-2" *ngIf="!(commonServices.isLoading$ | async); else loading">
   <div class="bank-form-container col-9">
-    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <input autocomplete="off" name="hidden" type="text" style="display:none;">
       <div class="row">
         <div class="form-group col-md-6">
           <label for="inputEmail4">Bank Name</label>
           <ng-select [items]="container['bankName'] | async" bindLabel="name"
                       (click)="getLOVs('https://griffin-be.herokuapp.com/api/v1/transactions/banks','bankName',{loading:'bankNameLoading'})"
                       notFoundText = "{{container['bankNameLoading'] || 'No items found'}}"
-                      placeholder="Select Bank Name" formControlName="bankCode">
+                      placeholder="Select Bank" formControlName="bankCode">
           </ng-select>
           <span *ngIf="uiErrors.bankCode">{{uiErrors.bankCode}}</span>
         </div>
@@ -15,7 +19,7 @@
       <div class="row">
         <div class="form-group col-md-6">
           <label for="inputAddress">Account Number</label>
-          <input formControlName="nuban" type="text" class="form-control" autocomplete="off" maxlength="10" placeholder="Enter Account Number">
+          <input formControlName="nuban" name="nuban" type="text" class="form-control" (keyup)="onNubanChanged()" maxlength="10" autocomplete="off" placeholder="Enter Account Number">
           <span *ngIf="uiErrors.nuban">{{uiErrors.nuban}}</span>
           <mat-spinner *ngIf="loadingBankName" [diameter]="30"></mat-spinner>
           <p class="pt-2 font-weight-bolder" *ngIf="!uiErrors.nuban && !loadingBankName" [ngClass]="bankAccountName?.success?'text-dark':'text-danger'">{{bankAccountName?.name}}</p>
@@ -24,13 +28,13 @@
       <div class="row">
         <div class="form-group col-md-6">
           <label for="inputAddress">Password</label>
-          <input formControlName="password" type="password" class="form-control" autocomplete="off" placeholder="Enter Password">
+          <input formControlName="password" type="password" class="form-control" autocomplete="new-password" placeholder="Enter Password">
           <span *ngIf="uiErrors.password">{{uiErrors.password}}</span>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-12">
-          <button mat-flat-button type="submit" class="btn btn-danger submit-password-form" [disabled]="submitting || disableButton || loadingBankName">
+          <button mat-flat-button type="submit" class="auth-button" [disabled]="submitting || disableButton || loadingBankName">
             <span *ngIf="!submitting">Update Bank</span>
             <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
           </button>

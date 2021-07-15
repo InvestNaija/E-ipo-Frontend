@@ -11,6 +11,7 @@ import { ApiService } from './api.service';
 export class CommonService {
 
   email = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  url = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
   oneDigit = /\d/;
   oneLowerCase = /[a-z]/;
   oneUpperCase = /[A-Z]/;
@@ -95,6 +96,7 @@ export class CommonService {
     recursiveFunc(formToInvestigate);
     return invalidControls;
   }
+
   controlnvalid(controlToInvestigate: FormControl): string[] {
     const invalidControls: any = {};
     if (controlToInvestigate.invalid ) {
@@ -102,5 +104,17 @@ export class CommonService {
       invalidControls[controlName] = controlToInvestigate.errors;
     }
     return invalidControls;
+  }
+
+  displayErrors(formErrors: any, ValidationMessages: any, errors: any, uiErrors: any) {
+    Object.keys(formErrors).forEach((control) => {
+      formErrors[control] = '';
+    });
+    Object.keys(errors).forEach((control) => {
+      Object.keys(errors[control]).forEach(error => {
+        uiErrors[control] = ValidationMessages[control][error];
+      })
+    });
+    return {formErrors: formErrors, uiErrors: uiErrors};
   }
 }

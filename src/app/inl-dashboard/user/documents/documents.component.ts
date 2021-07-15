@@ -2,7 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/_shared/services/api.service';
+import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 import { AuthService } from '@app/_shared/services/auth.service';
+import { CommonService } from '@app/_shared/services/common.service';
+import { switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { FormErrors, ValidationMessages } from './documents.validators';
 
@@ -18,65 +21,78 @@ export class DocumentsComponent implements OnInit {
   uiErrors = FormErrors;
   validationMessages = ValidationMessages;
   loading: boolean;
-  uploading = false; firstFile = 0;
 
-  profOfAddress = [
-    {code: 'passport', value:  'passportNo', label: 'International Passport Number'},
-    {code: 'driverLicense', value:  'driverLicenseNo', label: 'Driver\'s License'},
-    {code: 'utility', value:  'utilityNo', label: 'Utility Bills'},
-    {code: 'nationalId', value:  'nationalIdNo', label: 'National Identity Card'}
-  ];
-  profOfId = [
-    {code: 'passport', value:  'passportNo', label: 'International Passport Number'},
-    {code: 'driverLicense', value:  'driverLicenseNo', label: 'Driver\'s License'},
-    {code: 'nationalId', value:  'nationalIdNo', label: 'National Identity Card'}
-  ];
   documents = [
-    {id: 'address', title: 'Proof of Address', IdType: null, idNumber: null, selectedFile:null, pondFile: []},
-    {id: 'id', title: 'Proof of Id', IdType: null, idNumber: null, selectedFile:null, pondFile: []}
+    {id: 'profOfAddress', title: 'Proof of Address', IdType: null, idNumber: null
+      , selectedFile:null, pondFile: [], storeIn: 'driverLicense', loading: false,
+      types:[
+        {code: 'passport', value:  'passportNo', label: 'International Passport Number'},
+        {code: 'driverLicense', value:  'driverLicenseNo', label: 'Driver\'s License'},
+        {code: 'utility', value:  'utilityNo', label: 'Utility Bills'},
+        {code: 'nationalId', value:  'nationalIdNo', label: 'National Identity Card'}
+      ]
+    },
+    {id: 'profOfId', title: 'Proof of Id', IdType: null, idNumber: null
+      , selectedFile:null, pondFile: [], storeIn: 'utility', loading: false,
+      types:  [
+        {code: 'passport', value:  'passportNo', label: 'International Passport Number'},
+        {code: 'driverLicense', value:  'driverLicenseNo', label: 'Driver\'s License'},
+        {code: 'nationalId', value:  'nationalIdNo', label: 'National Identity Card'}
+      ]},
+    {id: 'signature', title: 'Signature', IdType: null, idNumber: null
+        , selectedFile:null, pondFile: [], storeIn: 'passport', loading: false,
+        types:  [
+          {code: 'signature', value:  'passportNo', label: 'Signature'},
+      ]}
   ]
 
   pondOptions = {
     class: 'my-filepond',
     labelIdle: 'Drop files here',
-    acceptedFileTypes: 'image/png, image/jpeg, image/gif',
-    // beforeAddFile: function(item) {
-    //   // console.log(item);
-    //   // return false;
-    // }
+    acceptedFileTypes: 'image/png, image/jpeg, image/gif'
   };
   constructor(
     private apiService: ApiService,
     private auth: AuthService,
-    private http: HttpClient
+    private http: HttpClient,
+    private appContext: ApplicationContextService,
+    public commonServices: CommonService
     ) { }
 
   ngOnInit(): void {
-    this.loading = true;
-    this.apiService.get('/api/v1/customers/documents/fetch')
-      .subscribe(response => {
-        this.loading = false;
-        this.documents.map(doc => {
-          this.profOfAddress.map(proof => {
-            if(response.data[proof.code]) {
-              doc.IdType = proof;
-              doc.idNumber = response.data[proof.value];
-              doc.pondFile.push(response.data[proof.code]);
-            }
-          })
-          this.profOfId.map(proof => {
-            if(response.data[proof.code]) {
-              doc.IdType = proof;
-              doc.idNumber = response.data[proof.value];
-              doc.pondFile.push(response.data[proof.code]);
-            }
-          })
-        })
-      },
-      errResp => {
-        this.loading = false;
-        Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+    this.commonServices.isLoading$.pipe(
+      switchMap(loading => {
+        return this.appContext.userInformationObs();
+      })
+    ).subscribe(user => {
+      this.documents.map(doc => {
+        if(user[doc.storeIn]) {
+          doc.IdType = {label: doc.title};
+          doc.id == 'signature'? doc.IdType.code = 'signature' : ''
+          user[doc.storeIn] ? doc.pondFile.push(user[doc.storeIn]) : 0;
+          doc.idNumber = user[doc.storeIn + 'No'];
+        }
       });
+    })
+
+    // this.loading = true;
+    // this.apiService.get('/api/v1/customers/documents/fetch')
+    //   .subscribe(response => {
+    //     this.loading = false;
+    //     this.appContext.userInformation = response.data
+    //     this.documents.map(doc => {
+    //       if(response.data[doc.storeIn]) {
+    //         doc.IdType = {label: doc.title};
+    //         doc.id == 'signature'? doc.IdType.code = 'signature' : ''
+    //         response.data[doc.storeIn] ? doc.pondFile.push(response.data[doc.storeIn]) : 0;
+    //         doc.idNumber = response.data[doc.storeIn + 'No'];
+    //       }
+    //     })
+    //   },
+    //   errResp => {
+    //     this.loading = false;
+    //     Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+    //   });
   }
   DataURIToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',')
@@ -92,13 +108,21 @@ export class DocumentsComponent implements OnInit {
   beforeAdd(file: any) {
     console.log(file)
   }
+  pondHandleAddFile(document, event: any) {
+    // console.log( = .firstFile)
+    document.selectedFile = event.file.getFileEncodeDataURL();
+  }
   onSaveFile(document: any) {
     if(!document.IdType) {
-      Swal.fire('', `Please select ${document.IdType?.label} type first`, 'error');
+      Swal.fire('', `Please select ${document.title} type first`, 'error');
       return;
     }
-    if(document.IdType?.code !== 'UB' && !document.idNumber ) {
-      Swal.fire('', `You need to provide ${document.IdType?.label} number`, 'error');
+    if(document.IdType?.code !== 'utility' && document.IdType?.code !== 'signature' && !document.idNumber ) {
+      Swal.fire('', `You need to provide ${document.title} number`, 'error');
+      return;
+    }
+    if(!document.selectedFile ) {
+      Swal.fire('', `No image uploaded for ${document.title}`, 'error');
       return;
     }
     Swal.fire({
@@ -112,17 +136,20 @@ export class DocumentsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         const fd = new FormData();
-        fd.append(document['IdType']['code'], this.DataURIToBlob(document.selectedFile) );
-        fd.append(document['IdType']['value'], document.idNumber);
+        fd.append(document.storeIn, this.DataURIToBlob(document.selectedFile) );
+        fd.append(document.storeIn + 'No', document.idNumber);
+
+        // console.log(fd, document); return;
         let headers = new HttpHeaders()
           .append('Authorization', `${this.auth.getToken()}`);
+          document.loading = true;
         this.http.post('/api/v1/customers/upload-documents', fd, {headers: headers})
             .subscribe((response: any) => {
-              this.uploading = false;
+              document.loading = true;
               Swal.fire('Great!', response?.message, 'success')
             },
             errResp => {
-              this.uploading = false;
+              document.loading = true;
               Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
             })
       }

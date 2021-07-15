@@ -3,13 +3,14 @@ export const ValidationMessages  = {
     'required': 'Email is required',
   },
   'sharePrice' : {
-    'required': 'OTP is required',
+    'required': 'Share price cannot be empty. Did you tamper with this field',
   },
   'units' : {
-    'required': 'OTP is required',
+    'required': 'Number of Units is required',
+    'min': 'Minimum number of units is 1',
   },
   'amount' : {
-    'required': 'OTP is required',
+    'required': 'Amount is required.',
   }
 };
 export let FormErrors = {
