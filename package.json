@@ -45,6 +45,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "ngx-filepond": "^6.0.0",
+    "ngx-toastr": "^14.0.0",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.0.18",
     "tslib": "^2.0.0",
