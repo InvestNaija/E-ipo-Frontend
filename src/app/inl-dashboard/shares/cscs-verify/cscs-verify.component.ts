@@ -36,7 +36,6 @@ export class VerifyCscsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private aRoute: ActivatedRoute,
-    private router: Router,
     private apiService: ApiService,
     public commonServices: CommonService,
     private appService: ApplicationContextService,
@@ -52,7 +51,7 @@ export class VerifyCscsComponent implements OnInit {
       .pipe(
         switchMap(params => {
           this.assetId = params.get('id');
-          return this.apiService.get(`/api/v1/reservations/fetch/${params.get('txnId')}`)
+          return this.apiService.get(`/api/v1/reservations/fetch/${params.get('id')}`)
         })
       )
       .subscribe(response => {
@@ -78,6 +77,7 @@ export class VerifyCscsComponent implements OnInit {
           this.uiErrors[control] = ValidationMessages[control][error];
         })
       });
+      this.submitting = true;
       return;
     }
     console.log(this.myForm.value);
@@ -108,6 +108,7 @@ export class VerifyCscsComponent implements OnInit {
         })
       )
       .subscribe(([user, paymentRef]) => {
+        this.submitting = false;
         this.appService.userInformation = user.data
         this.document.location.href = paymentRef.data.authorization_url;
       },

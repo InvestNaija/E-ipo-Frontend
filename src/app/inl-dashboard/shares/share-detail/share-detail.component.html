@@ -3,7 +3,7 @@
     <div class="col-12">
       <a [routerLink]="['/dashboard/index']" class="text-dark text-decoration-none">< Back</a>
       <div class="page-title">
-        <h1>Shares</h1>
+        <h1>{{share?.name}}</h1>
       </div>
     </div>
   </div>
@@ -23,14 +23,14 @@
       <div class="d-flex">
         <img [src]="share?.image" alt="{{share?.name}}" style="height: 70px;">
         <div class="ml-2" style="margin-left: 10px;">
-          <h6>{{share?.name}}</h6>
+          <h3 class="font-weight-bold text-muted mb-1">{{share?.name}}</h3>
           <p class="m-0">{{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}} - {{share?.anticipatedMaxPrice | currency:share?.currency:"symbol-narrow"}}</p>
           <p class="m-0 text-success font-weight-bold">+0 (+0%)</p>
         </div>
       </div>
     </div>
     <div class="col-sm-12 col-md-2">
-      <button class="btn btn-danger"  (click)="onExpressInterest(share)">Express Interest</button>
+      <button class="btn auth-button"  (click)="onExpressInterest(share)">Purchase</button>
     </div>
   </div>
   <div class="row">
@@ -70,9 +70,8 @@
     <div class="col-md-6">
       <div class="card" style="min-height: 316px;">
         <div class="card-body">
-          <h3 class="card-title mb-3">IPO Description</h3>
-          <h2 class="card-title text-dark">About {{share?.name | uppercase}}</h2>
-          <p>{{share?.description}}</p>
+          <h2 class="card-title text-dark text-muted">About {{share?.name | uppercase}}</h2>
+          <div [innerHtml]="share?.description"></div>
         </div>
       </div>
     </div>

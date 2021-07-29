@@ -3,11 +3,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { catchError, finalize, map, startWith, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { ApiService } from '@app/_shared/services/api.service';
 import { Router } from '@angular/router';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
+
 
 export interface PeriodicElement {
   position: number;
@@ -43,6 +45,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private router: Router,
     private api: ApiService,
     private appService: ApplicationContextService,
+    private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +60,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.getTransactions();
+  }
+
+  getTransactions() {
     this.paginator.page
       .pipe(
         startWith({}),
@@ -105,7 +112,30 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   onMakePayment(element: any) {
     this.appService.checkCSCS(element);
   }
+
+  deleting = false;
   onDeleteTransaction(element: any) {
-    Swal.fire('Oops...', 'Delete functionality not yet implemented','error');
+    Swal.fire({
+      title: 'Delete transaction',
+      text: "Deleting transaction is irreversible action",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#06262D',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Proceed!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleting=true;
+        this.api.delete(`/api/v1/reservations/cancel/${element.id}`)
+          .subscribe(response => {
+            this.toastr.success(response.message);
+            this.deleting=false;
+            this.getTransactions();
+          },errResp => {
+            this.deleting=false;
+          });
+      }
+    });
   }
 }

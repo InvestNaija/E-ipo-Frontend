@@ -18,7 +18,8 @@ export class UserComponent implements OnInit {
     { page: 'socials', url: '/dashboard/user/socials' },
     { page: 'nok', url: '/dashboard/user/nok' },
     { page: 'documents', url: '/dashboard/user/documents' },
-    { page: 'banks', url: '/dashboard/user/banks' }
+    { page: 'banks', url: '/dashboard/user/banks' },
+    { page: 'others', url: '/dashboard/user/others' }
   ]
   selectedIndex;
 

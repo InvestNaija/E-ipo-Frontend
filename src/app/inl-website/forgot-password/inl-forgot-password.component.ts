@@ -7,7 +7,7 @@ import { ApiService } from '@app/_shared/services/api.service';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 import { AuthService } from '@app/_shared/services/auth.service';
 import { CommonService } from '@app/_shared/services/common.service';
-import { FormErrors, ValidationMessages } from './reset-password.validators';
+import { FormErrors, ValidationMessages } from './forgot-password.validators';
 
 @Component({
   selector: 'in-inl-forgot-password',

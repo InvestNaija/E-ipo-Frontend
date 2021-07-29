@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
+import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
@@ -34,6 +36,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
 
   constructor(
     private router: Router,
+    private toastr: ToastrService,
     private api: ApiService,
     private appService: ApplicationContextService
   ) { }
@@ -43,6 +46,10 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
 
   ngOnInit(): void { }
   ngAfterViewInit() {
+    this.getTransactions();
+  }
+
+  getTransactions() {
     this.paginator.page
       .pipe(
         startWith({}),
@@ -52,7 +59,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
         }),
         map((response: any) => {
           // this.total_count = data.response.totalItems;
-          return response.data;
+          return response.data;//.filter(o => o.asset.currency.includes('USD'));
         }),
         catchError(() => {
           return of([]);
@@ -67,7 +74,34 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
         };
       });
   }
+
   onMakePayment(element: any) {
     this.appService.checkCSCS(element);
+  }
+
+  deleting=false;
+  onDeleteTransaction(element: any) {
+    Swal.fire({
+      title: 'Delete transaction',
+      text: "Deleting transaction is irreversible action",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#06262D',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Proceed!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleting=true;
+        this.api.delete(`/api/v1/reservations/cancel/${element.id}`)
+          .subscribe(response => {
+            this.toastr.success(response.message);
+            this.deleting=false;
+            this.getTransactions();
+          },errResp => {
+            this.deleting=false;
+          });
+      }
+    });
   }
 }

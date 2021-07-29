@@ -1,0 +1,32 @@
+<ng-template #loading>
+  <mat-spinner [diameter]="60"></mat-spinner>
+</ng-template>
+<div class="row m-2" *ngIf="!(commonServices.isLoading$ | async); else loading">
+  <div class="bank-form-container col-9 mt-3">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="motherMaidenName">Mother's Maiden Name</label>
+          <input formControlName="motherMaidenName" type="text" class="form-control" placeholder="Enter your Mother's Maiden Name">
+          <span *ngIf="uiErrors.motherMaidenName">{{uiErrors.motherMaidenName}}</span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="placeOfBirth">Place of Birth</label>
+          <input formControlName="placeOfBirth" type="text" class="form-control" placeholder="Enter your Place of Birth">
+          <span *ngIf="uiErrors.placeOfBirth">{{uiErrors.placeOfBirth}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          &nbsp;
+        </div>
+        <div class="form-group col-md-6">
+          <button mat-flat-button type="submit" class="auth-button pull-right" [disabled]="submitting || disableButton || loadingBankName">
+            <span *ngIf="!submitting">Update Details</span>
+            <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

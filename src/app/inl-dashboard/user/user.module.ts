@@ -16,6 +16,7 @@ import { SocialsComponent } from './socials/socials.component';
 import { DocumentsComponent } from './documents/documents.component';
 import { BankingDetailsComponent } from './banking-details/banking-details.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { OtherDetailsComponent } from './other-details/other-details.component';
 import { SharedModule } from '../../_shared/shared.module';
 
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview';
@@ -44,7 +45,8 @@ registerPlugin(
     SocialsComponent,
     DocumentsComponent,
     BankingDetailsComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    OtherDetailsComponent
   ],
   imports: [
     CommonModule,

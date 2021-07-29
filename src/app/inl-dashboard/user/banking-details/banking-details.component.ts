@@ -117,6 +117,8 @@ export class BankingDetailsComponent implements OnInit, AfterViewInit {
             title: 'Update successful!',
             text: 'You will be redirected back to update CSCS data',
             confirmButtonText: `Proceed`,
+            allowOutsideClick: false,
+            allowEscapeKey: false
           }).then((result) => {
               if (result.isConfirmed) {
                 localStorage.removeItem('creating-cscs');

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ApiService } from '@app/_shared/services/api.service';
-import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable, of, Subscription } from "rxjs";
 import { debounceTime, filter, switchMap, take } from 'rxjs/operators';
 import { ApplicationContextService } from '../_shared/services/application-context.service';
@@ -23,6 +23,7 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   allSideNavEventsObservable$: Observable<Event>;
   userInformation: any;
   sidenavClickSubscription$: Subscription;
+  general$: Subscription;
 
   // @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
 
@@ -33,28 +34,37 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private apiService: ApiService,
     private appContext: ApplicationContextService
   ) {
-    this.router.events
-    .pipe(
-      filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd),
-      switchMap((event) => {
-        if (event.id === 1 && event.url === event.urlAfterRedirects) {
-          return this.apiService.get('/api/v1/customers/profile/fetch');
-        }
-        return of({status:'Refreshed', data: this.appContext.userInformation});
-      })
-    )
-    .subscribe((response) => {
-      this.userInformation = response.data;
-      this.appContext.userInformation = response.data
-        const user = this.appContext.userInformation;
-        if((!user.driverLicense || !user.utility || !user.passport) && this.router.url != '/dashboard/user/documents' ) {
-          this.toastr.warning(`<p>Your KYC documents are not complete</p><p>Click here to complete.</p>`, 'Notice', {timeOut: 3000, enableHtml: true, closeButton: true, tapToDismiss: true})
-            .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/documents'));
-        }else if((!user.nextOfKinName || !user.nextOfKinPhoneNumber || !user.nextOfKinRelationship) && this.router.url != '/dashboard/user/nok' ) {
-          this.toastr.warning(`<p>Your KYC documents are not complete</p><p>Click here to complete.</p>`, 'Notice', {timeOut: 3000, enableHtml: true, closeButton: true, tapToDismiss: true})
-            .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/nok'));
-        }
-    });
+    this.general$ = this.router.events
+        .pipe(
+          filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd),
+          switchMap((event) => {
+            if (event.id === 1 && event.url === event.urlAfterRedirects) {
+              return this.apiService.get('/api/v1/customers/profile/fetch');
+            }
+            return of({status:'Refreshed', data: this.appContext.userInformation});
+          })
+        )
+        .subscribe((response) => {
+            this.userInformation = response.data;
+            this.appContext.userInformation = response.data
+            const user = this.appContext.userInformation;
+            // if((!user.driverLicense || !user.utility || !user.passport) && this.router.url != '/dashboard/user/documents' ) {
+            //   this.toastr.warning(`<p>Your KYC documents are not complete</p><p>Click here to complete.</p>`, 'Notice', {timeOut: 3000, enableHtml: true, closeButton: true, tapToDismiss: true})
+            //     .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/documents'));
+            // }
+            const options = {timeOut: 5000, enableHtml: true, closeButton: true, tapToDismiss: true};
+
+            if((!user.mothersMaidenName || !user.placeOfBirth) && this.router.url != '/dashboard/user/others' ) {
+              this.toastr.warning(`<p>Some regulatory information are required</p><p>Click here to complete.</p>`, 'Notice', options)
+                .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/others'));
+            }else if((!user.bankCode || !user.nuban) && this.router.url != '/dashboard/user/banks' ) {
+              this.toastr.warning(`<p>Your settlement bank information is not available</p><p>Click here to complete.</p>`, 'Notice', options)
+                .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/banks'));
+            }else if((!user.nextOfKinName || !user.nextOfKinPhoneNumber || !user.nextOfKinRelationship) && this.router.url != '/dashboard/user/nok' ) {
+              this.toastr.warning(`<p>Your next of kin information is not available   </p><p>Click here to complete.</p>`, 'Notice', options)
+                .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/nok'));
+            }
+        });
   }
   toasterClickedHandler(url: string): void {
     this.router.navigateByUrl(url)
@@ -102,21 +112,16 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   logout() {
 
-    // const payload = {
-    //   username: 'admin',
-    //   password: 'admin'
-    // };
+    // const payload = { username: 'admin',  password: 'admin' };
 
-    // this.api.post('/auth/logout', payload)
-    //   .subscribe(() => {
-    //     this.auth.logout();
-    //   });
-
+    // this.api.post('/auth/logout', payload).subscribe(() => { this.auth.logout(); });
+    if (this.general$) {
+      this.general$.unsubscribe();
+    }
     this.auth.logout();
   }
 
   ngOnDestroy() {
     this.sidenavSubscription$.unsubscribe()
   }
-
 }

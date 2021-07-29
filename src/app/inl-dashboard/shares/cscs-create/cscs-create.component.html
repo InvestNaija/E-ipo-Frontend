@@ -66,10 +66,17 @@
               </div>
             </div>
             <div class="form-group border-bottom py-3">
-              <button class="btn btn-danger w-50 text-white pull-right" type="submit">
-                <span *ngIf="!submitting">Next >></span>
-                <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
-              </button>
+
+            <div class="row">
+              <div class="col-4"></div>
+                <div class="col-4"></div>
+                <div class="col-4">
+                  <button type="submit" class="auth-button w-100">
+                    <span *ngIf="!submitting">Next >></span>
+                    <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
+                  </button>
+                </div>
+              </div>
             </div>
           </form>
         </div>

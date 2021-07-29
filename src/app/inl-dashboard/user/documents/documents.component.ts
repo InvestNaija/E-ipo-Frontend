@@ -38,12 +38,14 @@ export class DocumentsComponent implements OnInit {
         {code: 'passport', value:  'passportNo', label: 'International Passport Number'},
         {code: 'driverLicense', value:  'driverLicenseNo', label: 'Driver\'s License'},
         {code: 'nationalId', value:  'nationalIdNo', label: 'National Identity Card'}
-      ]},
+      ]
+    },
     {id: 'signature', title: 'Signature', IdType: null, idNumber: null
         , selectedFile:null, pondFile: [], storeIn: 'passport', loading: false,
         types:  [
           {code: 'signature', value:  'passportNo', label: 'Signature'},
-      ]}
+      ]
+    }
   ]
 
   pondOptions = {
@@ -63,36 +65,24 @@ export class DocumentsComponent implements OnInit {
     this.commonServices.isLoading$.pipe(
       switchMap(loading => {
         return this.appContext.userInformationObs();
-      })
-    ).subscribe(user => {
+      }),
+      switchMap(loading => {
+        return this.apiService.get('/api/v1/customers/documents/kyc');
+      }),
+    ).subscribe(documents => {
       this.documents.map(doc => {
-        if(user[doc.storeIn]) {
-          doc.IdType = {label: doc.title};
-          doc.id == 'signature'? doc.IdType.code = 'signature' : ''
-          user[doc.storeIn] ? doc.pondFile.push(user[doc.storeIn]) : 0;
-          doc.idNumber = user[doc.storeIn + 'No'];
-        }
-      });
+        documents.data.forEach(uploaded => {
+          const fType = uploaded.name.split(";");
+          if(fType[0] === doc.id) {
+            doc.IdType =  doc.types.find(type => type.code == fType[1])
+            doc.pondFile.push(uploaded.value)
+          }
+          if(fType[0] === doc.id +'No') {
+            doc.idNumber = uploaded.value;
+          }
+        });
+      })
     })
-
-    // this.loading = true;
-    // this.apiService.get('/api/v1/customers/documents/fetch')
-    //   .subscribe(response => {
-    //     this.loading = false;
-    //     this.appContext.userInformation = response.data
-    //     this.documents.map(doc => {
-    //       if(response.data[doc.storeIn]) {
-    //         doc.IdType = {label: doc.title};
-    //         doc.id == 'signature'? doc.IdType.code = 'signature' : ''
-    //         response.data[doc.storeIn] ? doc.pondFile.push(response.data[doc.storeIn]) : 0;
-    //         doc.idNumber = response.data[doc.storeIn + 'No'];
-    //       }
-    //     })
-    //   },
-    //   errResp => {
-    //     this.loading = false;
-    //     Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
-    //   });
   }
   DataURIToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',')
@@ -136,20 +126,20 @@ export class DocumentsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         const fd = new FormData();
-        fd.append(document.storeIn, this.DataURIToBlob(document.selectedFile) );
-        fd.append(document.storeIn + 'No', document.idNumber);
+        fd.append(document.id + ';' + document.IdType?.code, this.DataURIToBlob(document.selectedFile) );
+        fd.append(document.id + 'No' + ';' + document.IdType?.code, document.idNumber);
 
         // console.log(fd, document); return;
         let headers = new HttpHeaders()
           .append('Authorization', `${this.auth.getToken()}`);
           document.loading = true;
-        this.http.post('/api/v1/customers/upload-documents', fd, {headers: headers})
+        this.http.post('/api/v1/customers/upload-kyc-documents', fd, {headers: headers})
             .subscribe((response: any) => {
-              document.loading = true;
+              document.loading = false;
               Swal.fire('Great!', response?.message, 'success')
             },
             errResp => {
-              document.loading = true;
+              document.loading = false;
               Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
             })
       }

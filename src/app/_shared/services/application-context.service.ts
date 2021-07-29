@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject, Subject, Subscription, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class ApplicationContextService {
 
   private _userInformation;
   private _userInformationObs = new BehaviorSubject(1);
+  private _userSub: Subscription;
 
   constructor(
     private router: Router,
@@ -33,7 +34,7 @@ export class ApplicationContextService {
   }
 
   checkCSCS(txn: any) {
-    this.userInformationObs()
+    this._userSub = this.userInformationObs()
           .subscribe(userDetail => {
             if(!userDetail.cscs) {
               Swal.fire({
@@ -47,6 +48,7 @@ export class ApplicationContextService {
                 cancelButtonText: 'No, I don\'t'
               }).then((result) => {
                 if (result.isConfirmed) {
+                  if(this._userSub) this._userSub.unsubscribe();
                   this.router.navigateByUrl(`/dashboard/shares/details/${txn.id}/verify-cscs-number`)
                 } else {
                   Swal.fire({
@@ -59,6 +61,7 @@ export class ApplicationContextService {
                     confirmButtonText: 'Proceed!',
                     cancelButtonText: 'Cancel'
                   }).then((result) => {
+                    if(this._userSub) this._userSub.unsubscribe();
                     if (result.isConfirmed) {
                       this.router.navigateByUrl(`/dashboard/shares/${txn.id}/create-new-cscs`)
                     } else {
@@ -68,6 +71,7 @@ export class ApplicationContextService {
                 }
               })
             } else {
+              if(this._userSub) this._userSub.unsubscribe();
               this.router.navigateByUrl(`/dashboard/transactions/${txn.id}/${txn.asset.id}/make-payment`)
             }
           });
