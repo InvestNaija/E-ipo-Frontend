@@ -12,11 +12,11 @@ import { HttpClient } from '@angular/common/http';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 
 @Component({
-  selector: 'in-kyc-details',
+  selector: 'in-kyc',
   templateUrl: './kyc.component.html',
   styleUrls: ['./kyc.component.scss']
 })
-export class OtherDetailsComponent implements OnInit {
+export class KYCComponent implements OnInit {
   myForm: FormGroup;
   errors = [];
   formErrors = FormErrors;
