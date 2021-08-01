@@ -89,7 +89,11 @@ export class ExpressionComponent implements OnInit {
     this.errors = this.commonServices.controlnvalid(this.myForm.get(ctrlName) as FormControl);
     this.displayErrors();
   }
-  onSubmit() {
+
+  onPayLater(isPayingNow: boolean) {
+    this.onSubmit(isPayingNow);
+  }
+  onSubmit(isPayingNow: boolean) {
     this.submitting = true;
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
@@ -105,7 +109,14 @@ export class ExpressionComponent implements OnInit {
     // this.APIResponse = false; this.submitting = false;
     this.apiService.post(`/api/v1/reservations/express-interest`, fd)
       .subscribe(response => {
-        this.router.navigateByUrl(`/dashboard/transactions/${response.data.reservation.id}/${response.data.asset.id}/make-payment`)
+        if(isPayingNow){
+          this.submitting = false;
+          let element = {id: response.data.reservation.id, asset:{id: response.data.asset.id}, goToTxns: true};
+          this.appService.checkCSCS(element);
+          this.router.navigateByUrl(`/dashboard/transactions`);
+        } else {
+          this.router.navigateByUrl(`/dashboard/transactions`);
+        }
       },
       errResp => {
         this.submitting = false;

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OtherDetailsComponent } from './other-details.component';
+import { OtherDetailsComponent } from './kyc.component';
 
 describe('OtherDetailsComponent', () => {
   let component: OtherDetailsComponent;

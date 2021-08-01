@@ -36,7 +36,8 @@ export class ApplicationContextService {
   checkCSCS(txn: any) {
     this._userSub = this.userInformationObs()
           .subscribe(userDetail => {
-            if(!userDetail.cscs) {
+            console.log(userDetail, userDetail.cscs, userDetail.cscsRef)
+            if(!userDetail.cscs && !userDetail.cscsRef) {
               Swal.fire({
                 title: 'CSCS Details',
                 text: "To make payment for this asset, you should have a CSCS Number. Do you have a CSCS Number?",
@@ -66,6 +67,9 @@ export class ApplicationContextService {
                       this.router.navigateByUrl(`/dashboard/shares/${txn.id}/create-new-cscs`)
                     } else {
                       Swal.fire('Note', 'You can not complete this transaction without a CSCS Number.','error');
+                      if(txn.goToTxns){
+                        this.router.navigateByUrl(`/dashboard/transactions`)
+                      }
                     }
                   });
                 }

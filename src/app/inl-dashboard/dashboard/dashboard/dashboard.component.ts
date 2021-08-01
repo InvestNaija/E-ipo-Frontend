@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.api.get('/api/v1/assets/top-assets')
       .subscribe(response => {
-        this.topAssets = response.data
+        this.topAssets = response.data.filter(o => !o.currency.includes('USD'))
         this.bestAsset.loading = false
         this.bestAsset.value = response.data.reduce(function(prev, current) {
           return (prev.sharePrice > current.sharePrice) ? prev : current
@@ -84,7 +84,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(response => {
         this.totalPortfolio.loading = false;
         let result = [];
-        response.reduce(function(res, value) {
+        response
+          .filter(o => !o.asset.currency.includes('USD'))
+          .reduce(function(res, value) {
           if(value.paid) {
             if (!res[value.asset.currency]) {
               res[value.asset.currency] = { currency: value.asset.currency, amount: 0 };

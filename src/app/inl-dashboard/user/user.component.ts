@@ -14,13 +14,14 @@ export class UserComponent implements OnInit {
 
   tabbedPages = [
     { page: null, url: '/dashboard/user/profile' },
+    { page: 'banks', url: '/dashboard/user/banks' },
+    { page: 'kyc', url: '/dashboard/user/kyc' },
+    { page: 'documents', url: '/dashboard/user/documents' },
+    { page: 'nok', url: '/dashboard/user/nok' },
     { page: 'password', url: '/dashboard/user/password' },
     { page: 'socials', url: '/dashboard/user/socials' },
-    { page: 'nok', url: '/dashboard/user/nok' },
-    { page: 'documents', url: '/dashboard/user/documents' },
-    { page: 'banks', url: '/dashboard/user/banks' },
-    { page: 'others', url: '/dashboard/user/others' }
   ]
+
   selectedIndex;
 
   constructor(

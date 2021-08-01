@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 import { ApiService } from '@app/_shared/services/api.service';
 import { CommonService } from '@app/_shared/services/common.service';
-import { FormErrors, ValidationMessages } from './other-details.validators';
+import { FormErrors, ValidationMessages } from './kyc.validators';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -12,9 +12,9 @@ import { HttpClient } from '@angular/common/http';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 
 @Component({
-  selector: 'in-other-details',
-  templateUrl: './other-details.component.html',
-  styleUrls: ['./other-details.component.scss']
+  selector: 'in-kyc-details',
+  templateUrl: './kyc.component.html',
+  styleUrls: ['./kyc.component.scss']
 })
 export class OtherDetailsComponent implements OnInit {
   myForm: FormGroup;

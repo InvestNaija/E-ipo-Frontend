@@ -29,9 +29,8 @@ export class SharesComponent implements OnInit  {
         return of([]);
       })
     ).subscribe(response => {
-      console.log(response.data)
       this.loadingSubject.next(false);
-      this.shares = response.data;
+      this.shares = response.data.filter(o => !o.currency.includes('USD'));
     });
   }
   onClickShares(share: any) {

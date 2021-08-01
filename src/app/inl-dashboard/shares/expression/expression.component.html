@@ -28,7 +28,7 @@
               </div>
             </div>
           </div>
-          <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+          <form [formGroup]="myForm" (ngSubmit)="onSubmit(true)">
             <div class="row border-bottom py-3">
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
@@ -64,14 +64,21 @@
               <p class="text-muted font-weight-bold">Total</p>
               <h1><small>{{myForm.get('amount').value | currency:share?.currency:'symbol-narrow' }}</small></h1>
             </div>
-            <div class="form-group border-bottom py-3">
-              <!-- <button class="btn btn-danger w-100 text-white" type="submit">
-                <span>  </span>
-              </button> -->
-              <button type="submit" class="auth-button w-100">
-                <span *ngIf="!submitting">Proceed to make payment >></span>
-                <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
-              </button>
+            <div class="row border-bottom py-3">
+              <div class="col-6">
+                <div class="form-group">
+                  <button type="submit" class="auth-button w-100">
+                    <span *ngIf="!submitting">Proceed to make payment >></span>
+                    <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
+                  </button>
+                </div>
+              </div>
+              <div class="col-6">
+                <a class="btn w-100" (click)="onSubmit(false)">
+                  <span *ngIf="!submitting">Pay Later</span>
+                  <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
+                </a>
+              </div>
             </div>
           </form>
         </div>

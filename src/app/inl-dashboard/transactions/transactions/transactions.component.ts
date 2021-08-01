@@ -59,7 +59,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
         }),
         map((response: any) => {
           // this.total_count = data.response.totalItems;
-          return response.data;//.filter(o => o.asset.currency.includes('USD'));
+          return response.data.filter(o => !o.asset.currency.includes('USD'));
         }),
         catchError(() => {
           return of([]);
