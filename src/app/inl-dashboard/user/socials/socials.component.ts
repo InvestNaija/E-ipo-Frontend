@@ -52,7 +52,7 @@ export class SocialsComponent implements OnInit {
       return;
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
-    this.apiService.post('/api/v1/customers/update-profile', fd)
+    this.apiService.patch('/api/v1/customers/update-profile', fd)
       .subscribe(response => {
         this.container['submitting'] = false;
         Swal.fire('Great!', response?.message, 'success')

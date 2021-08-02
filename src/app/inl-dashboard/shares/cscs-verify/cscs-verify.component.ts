@@ -66,6 +66,10 @@ export class VerifyCscsComponent implements OnInit {
     });
   }
 
+  // verifyNo(cscsNo: number) {
+  //   /api/v1/verifications/cscs
+  // }
+
   onSubmit() {
     this.submitting = true;
     if (this.myForm.invalid) {
