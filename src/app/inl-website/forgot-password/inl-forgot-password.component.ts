@@ -53,7 +53,9 @@ export class InlForgotPasswordComponent implements OnInit {
       return;
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
-    console.log(fd);
+    const getUrl = window.location;
+    fd.baseUrl = getUrl .protocol + "//" + getUrl.host
+    // console.log(fd); return;
 
     this.api.post('/api/v1/auth/customers/forgot-password', fd, false)
       .subscribe(response => {

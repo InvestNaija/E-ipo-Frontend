@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   gateway: 'flutterwave',
-  apiUrl: ''
+  apiUrl: 'https://dollarfund.azurewebsites.net'
 };
 
 /*

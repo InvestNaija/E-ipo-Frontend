@@ -12,7 +12,7 @@ import { SignupGuard } from './signup.guard';
 import { InlVerifyOtpComponent } from './verify-otp/inl-verify-otp.component';
 
 const routes: Routes = [
-  { path: 'auth', component: InlAuthComponent,
+    { path: 'auth', component: InlAuthComponent,
     children: [
       { path: 'login', component: InlLoginComponent },
       { path: 'forgot-password', component: InlForgotPasswordComponent },
