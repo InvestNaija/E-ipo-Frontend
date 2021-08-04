@@ -5,6 +5,9 @@ import Swal from 'sweetalert2';
 import { ApiService } from '@app/_shared/services/api.service';
 import { FormErrors, ValidationMessages } from './profile.validators';
 import { DatePipe } from '@angular/common';
+import { catchError, switchMap } from 'rxjs/operators';
+import { ApplicationContextService } from '@app/_shared/services/application-context.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'in-profile',
@@ -44,7 +47,9 @@ export class ProfileComponent implements OnInit {
   }
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private apiService: ApiService,
+    private appContext: ApplicationContextService,
     private datePipe: DatePipe
     ) { }
 
@@ -53,6 +58,8 @@ export class ProfileComponent implements OnInit {
     this.apiService.get('/api/v1/customers/profile/fetch')
       .subscribe(response => {
         this.loading = false;
+
+        this.appContext.userInformation = response.data;
 
         const user = response.data
         const dob = new Date(user.dob)
@@ -87,7 +94,9 @@ export class ProfileComponent implements OnInit {
     this.apiService.patch('/api/v1/customers/update-avatar', {image: this.uploadedImage})
       .subscribe(response => {
         this.uploading = false;
-        Swal.fire('Great!', response?.message, 'success')
+        // this.ngOnInit();
+        window.location.reload();
+        Swal.fire('Great!', 'Profile picture updated.', 'success')
       },
       errResp => {
         this.uploading = false;

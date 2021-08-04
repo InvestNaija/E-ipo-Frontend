@@ -19,6 +19,7 @@ export class InlLoginComponent implements OnInit {
   errors = [];
   formErrors = FormErrors;
   uiErrors = FormErrors;
+  container = {};
   validationMessages = ValidationMessages;
   APIResponse = false; submitting = false;
 
@@ -41,6 +42,7 @@ export class InlLoginComponent implements OnInit {
           Validators.minLength(6)
         ]
       ],
+      rememberMe: [null ],
     });
   }
 
@@ -69,6 +71,7 @@ export class InlLoginComponent implements OnInit {
           this.router.navigate([this.auth.redirectUrl]);
           this.auth.redirectUrl = '';
         } else {
+          localStorage.setItem('rememberMe', fd.rememberMe)
           this.router.navigate(['/dashboard']);
         }
       },

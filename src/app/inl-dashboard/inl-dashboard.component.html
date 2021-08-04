@@ -166,13 +166,14 @@
         <button mat-icon-button>
           <mat-icon class="">notifications_active_outlined</mat-icon>
         </button> -->
+        <!-- {{(appContext.userInformationObs() | async) | json}} -->
 
         <button mat-flat-button [matMenuTriggerFor]="menu" class="profile-menu">
-          <img *ngIf="!userInformation?.image" src="/assets/images/face_placeholder.png" alt="">
-          <img *ngIf="userInformation?.image" [src]="userInformation.image" alt="">
+          <img *ngIf="!(appContext.userInformationObs() | async)?.image" src="/assets/images/face_placeholder.png" alt="">
+          <img *ngIf="(appContext.userInformationObs() | async)?.image" [src]="(appContext.userInformationObs() | async)?.image" alt="">
           <div class="user-details">
             <p class="top">Hello,</p>
-            <p class="bottom">{{userInformation?.lastName}} {{userInformation?.firstName}}</p>
+            <p class="bottom">{{(appContext.userInformationObs() | async)?.lastName}} {{(appContext.userInformationObs() | async)?.firstName}}</p>
           </div>
           <mat-icon>expand_more</mat-icon>
         </button>

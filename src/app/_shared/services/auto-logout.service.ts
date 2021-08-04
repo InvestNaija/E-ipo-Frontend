@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from '@angular/router'
 import { AuthService } from "./auth.service";
-const MINUTES_UNITL_AUTO_LOGOUT = 15 // in mins
+const MINUTES_UNITL_AUTO_LOGOUT = 1 // in mins
 const CHECK_INTERVAL = 15000 // in ms
 const STORE_KEY =  'lastAction';
 
@@ -14,7 +14,7 @@ export class AutoLogoutService {
     this.check();
     this.initListener();
     this.initInterval();
-    localStorage.setItem(STORE_KEY,Date.now().toString());
+    localStorage.setItem(STORE_KEY, Date.now().toString());
   }
 
   public getLastAction() {
@@ -48,7 +48,7 @@ export class AutoLogoutService {
     const diff = timeleft - now;
     const isTimeout = diff < 0;
 
-    if (isTimeout)  {
+    if (isTimeout && !localStorage.getItem('rememberMe'))  {
       localStorage.removeItem(STORE_KEY)
       localStorage.clear();
       this.authService.logout();

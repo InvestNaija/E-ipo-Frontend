@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   gateway: 'flutterwave',
-  apiUrl: 'https://dollarfund.azurewebsites.net'
+  apiUrl: 'https://chapel-hill-be.herokuapp.com'
 };
 
 /*

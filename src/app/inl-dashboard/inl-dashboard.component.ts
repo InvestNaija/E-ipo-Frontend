@@ -32,7 +32,7 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private toastr: ToastrService,
     private auth: AuthService,
     private apiService: ApiService,
-    private appContext: ApplicationContextService
+    public appContext: ApplicationContextService
   ) {
     this.general$ = this.router.events
         .pipe(
@@ -71,6 +71,7 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('loading dashboard component');
     this.setupSideBar();
 
     if(!this.auth.getToken()) {
@@ -123,5 +124,6 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.sidenavSubscription$.unsubscribe()
+    this.logout();
   }
 }
