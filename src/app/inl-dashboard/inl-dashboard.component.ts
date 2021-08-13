@@ -53,11 +53,11 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               this.logout();
             }
 
-            const options = {timeOut: 5000, enableHtml: true, closeButton: true, tapToDismiss: true, preventDuplicates: true, preventOpenDuplicates: true};
-            if((!user.nextOfKinName || !user.nextOfKinPhoneNumber || !user.nextOfKinRelationship) && this.router.url != '/dashboard/user/nok' ) {
-              this.toast$ = this.toastr.warning(`<p>Your next of kin information is not available   </p><p>Click here to complete.</p>`, 'Notice', options)
-                .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/nok'));
-            }
+            // const options = {timeOut: 5000, enableHtml: true, closeButton: true, tapToDismiss: true, preventDuplicates: true, preventOpenDuplicates: true};
+            // if((!user.nextOfKinName || !user.nextOfKinPhoneNumber || !user.nextOfKinRelationship) && this.router.url != '/dashboard/user/nok' ) {
+            //   this.toast$ = this.toastr.warning(`<p>Your next of kin information is not available   </p><p>Click here to complete.</p>`, 'Notice', options)
+            //     .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/nok'));
+            // }
         });
   }
   toasterClickedHandler(url: string): void {
