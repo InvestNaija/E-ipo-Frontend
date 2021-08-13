@@ -1,3 +1,12 @@
+.card-body .row[data-v-65e651c5] {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(var(--bs-gutter-y)*-1);
+  margin-right: calc(var(--bs-gutter-x)/-2);
+  margin-left: calc(var(--bs-gutter-x)/-2);
+}
 .card-body .user-pose[data-v-65e651c5] {
     position: absolute;
     bottom: 10px;
@@ -8,6 +17,7 @@
 }
 .card-body .user-pose svg[data-v-65e651c5] {
   height: 120px;
+  vertical-align: middle;
 }
 
 .card-title[data-v-65e651c5] {

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import {  switchMap } from 'rxjs/operators';
+import {  debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 import { IShare } from '../../_models/share.model';
@@ -12,6 +12,7 @@ import { FormErrors, ICSCS, ValidationMessages } from './cscs-verify.validators'
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 import { DOCUMENT } from '@angular/common';
 import { environment } from '@environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'in-cscs-verify',
@@ -33,9 +34,12 @@ export class VerifyCscsComponent implements OnInit {
   assetId: string;
   txn: any;
 
+  cscsName: string;
+
   constructor(
     private fb: FormBuilder,
     private aRoute: ActivatedRoute,
+    private router: Router,
     private apiService: ApiService,
     public commonServices: CommonService,
     private appService: ApplicationContextService,
@@ -56,7 +60,22 @@ export class VerifyCscsComponent implements OnInit {
       )
       .subscribe(response => {
         this.txn = response.data
+      });
+
+    this.myForm.get('cscsNo').valueChanges.pipe(
+      filter(res => res.length > 2)
+      , debounceTime(800), distinctUntilChanged()
+      , switchMap(data => {
+        this.cscsName = ''; this.submitting = true;
+        return this.apiService.post(`/api/v1/mtn/customers/first-step`, {"cscsNo": data});
       })
+    ).subscribe((response: any) => {
+      this.submitting = false;
+      this.cscsName = response.data.cscsResponse;
+    },
+    errResp => {
+      Swal.fire('Oops...', errResp?.error?.error?.message? errResp?.error?.error?.message : errResp.statusText, 'error')
+    });
   }
 
   populateExpression(expression: ICSCS) {
@@ -65,10 +84,6 @@ export class VerifyCscsComponent implements OnInit {
       cscsNo: expression?.cscsNo,
     });
   }
-
-  // verifyNo(cscsNo: number) {
-  //   /api/v1/verifications/cscs
-  // }
 
   onSubmit() {
     this.submitting = true;
@@ -81,13 +96,13 @@ export class VerifyCscsComponent implements OnInit {
           this.uiErrors[control] = ValidationMessages[control][error];
         })
       });
-      this.submitting = true;
+      this.submitting = false;
       return;
     }
     console.log(this.myForm.value);
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
     fd.cscsNo = fd.cscsNo.toString()
-    this.apiService.post('/api/v1/verifications/cscs', fd)
+    this.apiService.patch('/api/v1/verifications/cscs/no-verification', fd)
       .pipe(
         switchMap(resp => {
           Swal.fire({
@@ -104,17 +119,14 @@ export class VerifyCscsComponent implements OnInit {
             reservationId: this.assetId,
             currency: this.txn.asset?.currency
           }
-
-        return combineLatest([
-            this.apiService.get(`/api/v1/customers/profile/fetch`),
-            this.apiService.post('/api/v1/reservations/make-payment', payload)
-          ])
+          return this.apiService.get(`/api/v1/customers/profile/fetch`)
         })
       )
-      .subscribe(([user, paymentRef]) => {
+      .subscribe((user) => {
         this.submitting = false;
         this.appService.userInformation = user.data
-        this.document.location.href = paymentRef.data.authorization_url;
+
+        this.router.navigateByUrl(`/dashboard/transactions/${this.txn.id}/${this.txn.asset.id}/make-payment`);
       },
       errResp => {
         this.submitting = false;

@@ -4,7 +4,8 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '@environments/environment';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
+import { ConnectionService } from 'ng-connection-service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private auth: AuthService,
-    // private toastr: ToastrService
+    private toastr: ToastrService,
+    private cxnService: ConnectionService
     ) { }
 
   get(url: string, useToken: boolean = true): Observable<any> {
@@ -50,6 +52,20 @@ export class ApiService {
       headers,
     }
 
+    console.log( 'About to check cxn' );
+    this.cxnService.monitor().subscribe(isConnected => {
+
+      console.log( 'Checking cxn' );
+
+      console.log( isConnected );
+      // if (this.isConnected) {
+      //   this.noInternetConnection=false;
+      // }
+      // else {
+      //   this.noInternetConnection=true;
+      // }
+    })
+
     const endpoint = environment.apiUrl + url
     return this.http.request(method, endpoint, options)
       .pipe(catchError((error: HttpErrorResponse) => this.onRequestError(error)));
@@ -57,17 +73,15 @@ export class ApiService {
 
   onRequestError(error: HttpErrorResponse) {
 
-    console.log('error', error);
-
-    if (error.error instanceof ErrorEvent) {
-      // this.toastr.error(error.error.message, 'Operation Unsuccessful');
-    } else {
-      // this.toastr.error(error.error, 'Operation Unsuccessful');
-    }
-
     if (error.status === 401) {
-      // this.toastr.error('Your session has timed out', 'Authentication Error');
-      // this.auth.logout();
+      console.log(error.statusText, error.status +': Server Error');
+      this.toastr.error('Your session has timed out', 'Authentication Error');
+      this.auth.logout();
+    }
+    if (error.status >= 500 && error.status < 600) {
+      console.log(error.statusText, error.status +': Server Error');
+      this.toastr.error(error.statusText, error.status +': Server Error');
+      return;
     }
 
     return throwError(error);

@@ -19,18 +19,6 @@
         <input formControlName="email" id="email" class="form-control" type="email" placeholder="Email" (keyup)="controlChanged('email')" />
         <span class="form-text" *ngIf="uiErrors.email">{{uiErrors.email }}</span>
       </div>
-      <!-- <div class="form-group">
-        <label for="email" *ngIf="myForm.get('password')?.value">Password</label>
-        <div class="input-group">
-          <input formControlName="password" type="password" class="form-control border-right-0" placeholder="Password" (keyup)="controlChanged('password')" />
-          <div class="input-group-append">
-            <span class="input-group-text cursor-pointer" role="button">
-              <i class="fa fa-eye-slash pl-2 pr-2"></i>
-            </span>
-         </div>
-         <span *ngIf="uiErrors.password">{{uiErrors.password }}</span>
-        </div>
-      </div> -->
       <div class="form-group has-search">
         <label for="email" *ngIf="myForm.get('password')?.value">Password</label>
         <span (click)="container['fieldTextType'] = !container['fieldTextType']" class="fa form-control-feedback" [ngClass]="{

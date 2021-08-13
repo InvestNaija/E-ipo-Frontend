@@ -12,7 +12,11 @@ import { ToastrModule } from 'ngx-toastr';
   imports: [
     CommonModule,
     RouterModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      maxOpened: 1,
+      preventDuplicates: true,
+      autoDismiss: true
+    }),
   ],
   exports: [ CommonModule, RouterModule, ToastrModule, FormsModule, ReactiveFormsModule,
     NgSelectModule ]

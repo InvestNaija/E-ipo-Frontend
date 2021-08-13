@@ -24,6 +24,7 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   userInformation: any;
   sidenavClickSubscription$: Subscription;
   general$: Subscription;
+  toast$: Subscription;
 
   // @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
 
@@ -48,20 +49,13 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.userInformation = response.data;
             this.appContext.userInformation = response.data
             const user = this.appContext.userInformation;
-            // if((!user.driverLicense || !user.utility || !user.passport) && this.router.url != '/dashboard/user/documents' ) {
-            //   this.toastr.warning(`<p>Your KYC documents are not complete</p><p>Click here to complete.</p>`, 'Notice', {timeOut: 3000, enableHtml: true, closeButton: true, tapToDismiss: true})
-            //     .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/documents'));
-            // }
-            const options = {timeOut: 5000, enableHtml: true, closeButton: true, tapToDismiss: true};
+            if(!user) {
+              this.logout();
+            }
 
-            if((!user.mothersMaidenName || !user.placeOfBirth) && this.router.url != '/dashboard/user/others' ) {
-              this.toastr.warning(`<p>Some regulatory information are required</p><p>Click here to complete.</p>`, 'Notice', options)
-                .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/others'));
-            }else if((!user.bankCode || !user.nuban) && this.router.url != '/dashboard/user/banks' ) {
-              this.toastr.warning(`<p>Your settlement bank information is not available</p><p>Click here to complete.</p>`, 'Notice', options)
-                .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/banks'));
-            }else if((!user.nextOfKinName || !user.nextOfKinPhoneNumber || !user.nextOfKinRelationship) && this.router.url != '/dashboard/user/nok' ) {
-              this.toastr.warning(`<p>Your next of kin information is not available   </p><p>Click here to complete.</p>`, 'Notice', options)
+            const options = {timeOut: 5000, enableHtml: true, closeButton: true, tapToDismiss: true, preventDuplicates: true, preventOpenDuplicates: true};
+            if((!user.nextOfKinName || !user.nextOfKinPhoneNumber || !user.nextOfKinRelationship) && this.router.url != '/dashboard/user/nok' ) {
+              this.toast$ = this.toastr.warning(`<p>Your next of kin information is not available   </p><p>Click here to complete.</p>`, 'Notice', options)
                 .onTap.pipe(take(1)).subscribe(() => this.toasterClickedHandler('/dashboard/user/nok'));
             }
         });

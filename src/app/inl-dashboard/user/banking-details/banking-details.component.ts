@@ -108,9 +108,16 @@ export class BankingDetailsComponent implements OnInit, AfterViewInit {
     fd.bankCode = fd.bankCode.code;
     fd.bankAccountName = this.bankAccountName?.name;
     this.apiService.patch('/api/v1/customers/update-bank-details', fd)
-      .subscribe(response => {
+      .pipe(
+        switchMap(resp => {
+          return this.apiService.get(`/api/v1/customers/profile/fetch`)
+        })
+      )
+      .subscribe(user => {
         this.submitting = false;
+        this.appContext.userInformation = user.data
         const cscsPage = localStorage.getItem('creating-cscs');
+        const makingPayment = localStorage.getItem('making-payment');
         if(!!cscsPage) {
           Swal.fire({
             icon: 'success',
@@ -125,8 +132,23 @@ export class BankingDetailsComponent implements OnInit, AfterViewInit {
                 this.router.navigateByUrl(`dashboard/shares/${cscsPage}/create-new-cscs`)
               }
           })
-        } else {
-          Swal.fire('Great!', response?.message, 'success')
+        } else if(!!makingPayment) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Update successful!',
+            text: 'You will be redirected back to payment page',
+            confirmButtonText: `Proceed`,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.removeItem('making-payment');
+                const txn = JSON.parse(makingPayment)
+                this.router.navigateByUrl(`/dashboard/transactions/${txn.id}/${txn.asset.id}/make-payment`)
+              }
+          })
+        }else {
+          Swal.fire('Great!', 'Update successful!', 'success')
         }
       },
       errResp => {

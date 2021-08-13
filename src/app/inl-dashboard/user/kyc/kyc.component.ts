@@ -65,9 +65,48 @@ export class KYCComponent implements OnInit {
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
     this.apiService.patch('/api/v1/customers/update-profile', fd)
-      .subscribe(response => {
+      .pipe(
+        switchMap(resp => {
+          return this.apiService.get(`/api/v1/customers/profile/fetch`)
+        })
+      )
+      .subscribe(user => {
         this.submitting = false;
-        Swal.fire('Great!', response?.message, 'success');
+        this.appContext.userInformation = user.data
+        const cscsPage = localStorage.getItem('creating-cscs');
+        const makingPayment = localStorage.getItem('making-payment');
+        if(!!cscsPage) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Update successful!',
+            text: 'You will be redirected back to update CSCS data',
+            confirmButtonText: `Proceed`,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.removeItem('creating-cscs');
+                this.router.navigateByUrl(`dashboard/shares/${cscsPage}/create-new-cscs`)
+              }
+          })
+        } else if(!!makingPayment) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Update successful!',
+            text: 'You will be redirected back to payment page',
+            confirmButtonText: `Proceed`,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.removeItem('making-payment');
+                const txn = JSON.parse(makingPayment)
+                this.router.navigateByUrl(`/dashboard/transactions/${txn.id}/${txn.asset.id}/make-payment`)
+              }
+          })
+        }else {
+          Swal.fire('Great!', 'Update successful!', 'success')
+        }
       },
       errResp => {
         this.submitting = false;

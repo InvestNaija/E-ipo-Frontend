@@ -1,14 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import Swal from 'sweetalert2';
 import { combineLatest } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 
 import { IShare } from '../../_models/share.model';
 import { ApiService } from '@app/_shared/services/api.service';
 import { CommonService } from '@app/_shared/services/common.service';
+import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 
 @Component({
   selector: 'in-make-payment',
@@ -22,32 +23,55 @@ export class MakePaymentComponent implements OnInit {
   asset: any;
   transaction: any;
 
+  routeAsset: string;
+  routeTxn: string;
+
   constructor(
+    private router: Router,
     private aRoute: ActivatedRoute,
     private apiService: ApiService,
+    private appContext: ApplicationContextService,
     public commonServices: CommonService,
     @Inject(DOCUMENT) private document: Document
     ) { }
 
   ngOnInit(): void {
     // Get Asset details
+    // Check if KYC data is complete
     this.aRoute.paramMap.pipe(
-      switchMap(params => {
-        this.commonServices.loading().next(true);
-        return combineLatest([
-                  // Name of the asset
-                  this.apiService.get(`/api/v1/assets/${params.get('assetId')}`),
-                  // expression of Interest Id
-                  this.apiService.get(`/api/v1/reservations/fetch/${params.get('txnId')}`)
+        switchMap(params => {
+          return this.appContext.userInformationObs()
+              .pipe(
+                  map(user => {
+                    if(!user.mothersMaidenName || !user.placeOfBirth) {
+                      localStorage.setItem('making-payment', JSON.stringify({id: params.get('txnId'), asset: {id: params.get('assetId')}}));
+                      Swal.fire('Error', 'Some regulatory information are required. Please complete to continue.','error');
+                      this.router.navigateByUrl(`/dashboard/user/kyc`);
+                    } else if (!user.bankCode || !user.nuban) {
+                      localStorage.setItem('making-payment', JSON.stringify({id: params.get('txnId'), asset: {id: params.get('assetId')}}));
+                      Swal.fire('Error', 'Your settlement bank information is not available. Please complete to continue.','error');
+                      this.router.navigateByUrl(`/dashboard/user/banks`);
+                    }
+                  }),
+                  switchMap(user => {
+                      this.commonServices.loading().next(true);
+                    return combineLatest([
+                              // Name of the asset
+                              this.apiService.get(`/api/v1/assets/${params.get('assetId')}`),
+                              // expression of Interest Id
+                              this.apiService.get(`/api/v1/reservations/fetch/${params.get('txnId')}`)
 
-        ]);
-      })
+                    ]);
+                  })
+                )
+        })
     ).subscribe(([asset, transaction]) => {
       this.commonServices.loading().next(false);
         console.log(asset, transaction);
         this.asset = asset.data;
         this.transaction = transaction.data;
-    })
+    });
+
   }
   onMakePayment(terms) {
     this.paying = true;

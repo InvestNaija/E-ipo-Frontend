@@ -21,12 +21,13 @@
                 <div class="form-group col-md-12 inl-form-input">
                   <input formControlName="cscsNo" class="form-control" type="text" placeholder="CSCS Number" />
                   <span *ngIf="uiErrors.cscsNo">{{uiErrors.cscsNo}}</span>
+                  <p class="pt-2 font-weight-bolder text-dark">{{cscsName}}</p>
                 </div>
               </div>
             </div>
             <div class="form-group border-bottom py-3">
-              <button type="submit" class="auth-button w-100">
-                <span *ngIf="!submitting">Proceed to Make Payment</span>
+              <button type="submit" class="auth-button w-100" [disabled]="submitting">
+                <span *ngIf="!submitting">{{cscsName=='CSCS Number is not valid' ? cscsName : 'Proceed to Make Payment'}}</span>
                 <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
               </button>
             </div>

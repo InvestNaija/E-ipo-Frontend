@@ -64,7 +64,8 @@ export class CscsCreateComponent implements OnInit {
         const user = userInfo.data;
         this.appService.userInformation = user;
         this.myForm.patchValue({
-          fullName: user.firstName + ' ' + user.lastName
+          fullName: user.firstName + ' ' + user.lastName,
+          MaidenName: user.mothersMaidenName
         })
         if(!user.bankCode) {
           Swal.fire({

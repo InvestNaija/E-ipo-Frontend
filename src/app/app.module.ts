@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './_shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import {ConnectionServiceModule} from 'ng-connection-service';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NgSelectModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    ConnectionServiceModule
   ],
   providers: [],
   bootstrap: [AppComponent]
