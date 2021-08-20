@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   total_count = 0;
   pageSize = 10;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
   private loadingSubject = new BehaviorSubject<boolean>(true);
   isLoading$ = this.loadingSubject.asObservable();
   topAssets: any;

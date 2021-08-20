@@ -8,6 +8,7 @@ import { AuthService } from '@app/_shared/services/auth.service';
 import { ApplicationContextService } from "@app/_shared/services/application-context.service";
 import { FormErrors, ValidationMessages } from './login.validators';
 import { CommonService } from '@app/_shared/services/common.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'in-inl-login',
@@ -29,7 +30,9 @@ export class InlLoginComponent implements OnInit {
     private auth: AuthService,
     private appContext: ApplicationContextService,
     private commonServices: CommonService,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     if (this.auth.isLoggedIn()) {
@@ -77,11 +80,7 @@ export class InlLoginComponent implements OnInit {
       },
       errResp => {
         this.APIResponse = false; this.submitting = false;
-        if(errResp?.status === 503) {
-          Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
-        } else {
-          Swal.fire('Oops...', errResp?.error?.error?.message, 'error');
-        }
+        this.toastr.error(errResp?.error?.error?.message, errResp?.status+': '+errResp.statusText);
       });
   }
 

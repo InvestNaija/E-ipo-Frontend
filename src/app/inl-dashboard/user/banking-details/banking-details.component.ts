@@ -35,7 +35,7 @@ export class BankingDetailsComponent implements OnInit, AfterViewInit {
     public apiService: ApiService,
     private appContext: ApplicationContextService,
     public commonServices: CommonService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.commonServices.isLoading$.pipe(

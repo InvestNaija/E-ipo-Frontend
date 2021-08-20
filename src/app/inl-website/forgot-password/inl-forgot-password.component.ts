@@ -68,9 +68,10 @@ export class InlForgotPasswordComponent implements OnInit {
         //   this.router.navigate(['/dashboard']);
         // }
       },
-      errResp => {
+      response => {
+        console.log(response.error);
         this.APIResponse = false; this.submitting = false;
-        Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+        Swal.fire('Oops...', response?.error?.error?.message, 'error')
       });
   }
 

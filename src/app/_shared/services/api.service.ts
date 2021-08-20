@@ -81,7 +81,7 @@ export class ApiService {
     if (error.status >= 500 && error.status < 600) {
       console.log(error.statusText, error.status +': Server Error');
       this.toastr.error(error.statusText, error.status +': Server Error');
-      return;
+      return throwError(error);
     }
 
     return throwError(error);
