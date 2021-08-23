@@ -1,7 +1,7 @@
 <div class="container-fluid p-4">
   <div class="row">
     <div class="col-12">
-      <a [routerLink]="['/dashboard/index']" class="text-dark text-decoration-none">< Back</a>
+      <in-backbutton></in-backbutton>
       <div class="page-title">
         <h1 class="display-block">My Profile</h1>
       </div>
@@ -21,9 +21,9 @@
             <mat-tab label="Bank Details">
               <in-banking-details *matTabContent></in-banking-details>
             </mat-tab>
-            <mat-tab label="KYC">
+            <!-- <mat-tab label="KYC">
               <in-kyc *matTabContent></in-kyc>
-            </mat-tab>
+            </mat-tab> -->
             <mat-tab label="Documents">
               <in-documents *matTabContent></in-documents>
             </mat-tab>

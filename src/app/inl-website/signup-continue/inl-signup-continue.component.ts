@@ -8,6 +8,7 @@ import { AuthService } from '@app/_shared/services/auth.service';
 import { ValidationMessages, FormErrors, KYCDetail } from './signup.validators';
 import { ApiService } from '@app/_shared/services/api.service';
 import { CommonService } from '@app/_shared/services/common.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'in-inl-signup-continue',
@@ -30,7 +31,9 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private commonServices: CommonService,
     private apiService: ApiService,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
@@ -44,7 +47,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
       photo: [null],
       address: [null],
       nin: [null],
-      bvn: [null, Validators.required],
+      bvn: [null, Validators.required], mothersMaidenName: [null, [Validators.required]], placeOfBirth: [null, [Validators.required]],
       signature: [],
       password: [null, [
           Validators.required,
@@ -78,7 +81,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
       birthdate: dob[2] + '-' + dob[1] + '-' +dob[0], //Format understood by browser
       email: kycDetail?.email,
       photo: kycDetail?.photo,
-      address: kycDetail?.residence?.address1,
+      address: kycDetail?.residentialAddress,
       nin: kycDetail?.nin,
       bvn: kycDetail?.bvn,
       signature: kycDetail?.signature,
@@ -91,12 +94,12 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.APIResponse = false; this.submitting = true;
+    this.APIResponse = true; this.submitting = true;
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
       this.displayErrors();
-      this.APIResponse = true; this.submitting = true;
+      this.APIResponse = false; this.submitting = false;
       return;
     }
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
@@ -122,11 +125,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
       },
       errResp => {
         this.APIResponse = false; this.submitting = false;
-        if(errResp?.status === 503) {
-          Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
-        } else {
-          Swal.fire('Oops...', errResp?.error?.error?.message, 'error');
-        }
+        this.toastr.error(errResp?.error?.error?.message, errResp?.status+': '+errResp.statusText);
       });
   }
 

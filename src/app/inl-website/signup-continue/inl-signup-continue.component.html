@@ -18,51 +18,67 @@
           <div class="col-md-6">
             <div class="form-group">
               <input class="form-control" formControlName="firstName" type="text" placeholder="First Name" readonly />
-              <span *ngIf="uiErrors.firstName">{{uiErrors.firstName}}</span>
+              <span *ngIf="uiErrors.firstName" class="text-danger">{{uiErrors.firstName}}</span>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <input class="form-control" formControlName="lastName" type="text" placeholder="Surname" readonly />
-              <span *ngIf="uiErrors.lastName">{{uiErrors.lastName}}</span>
+              <span *ngIf="uiErrors.lastName" class="text-danger">{{uiErrors.lastName}}</span>
             </div>
           </div>
         </div>
         <div class="form-group">
           <input class="form-control" formControlName="middleName" type="text" placeholder="Middle Name" readonly />
-          <span *ngIf="uiErrors.middleName">{{uiErrors.middleName}}</span>
+          <span *ngIf="uiErrors.middleName" class="text-danger">{{uiErrors.middleName}}</span>
         </div>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <input class="form-control" formControlName="birthdate" type="date" placeholder="Date Of Birth (mm/dd/yyyy)" readonly />
-              <span *ngIf="uiErrors.birthdate">{{uiErrors.birthdate}}</span>
+              <span *ngIf="uiErrors.birthdate" class="text-danger">{{uiErrors.birthdate}}</span>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <ng-select [items]="gender" placeholder="Gender" bindLabel="name" formControlName="gender">
+              <ng-select [items]="gender" placeholder="Gender" bindLabel="name" formControlName="gender" readonly>
               </ng-select>
-              <span *ngIf="uiErrors.gender">{{uiErrors.gender}}</span>
+              <span *ngIf="uiErrors.gender" class="text-danger">{{uiErrors.gender}}</span>
             </div>
           </div>
         </div>
         <div class="form-group">
           <input class="form-control" formControlName="phone" type="text" placeholder="Phone" />
-          <span *ngIf="uiErrors.phone">{{uiErrors.phone}}</span>
+          <span *ngIf="uiErrors.phone" class="text-danger">{{uiErrors.phone}}</span>
         </div>
         <div class="form-group">
-          <input class="form-control" formControlName="address" type="text" placeholder="Address Line 1" />
-          <span *ngIf="uiErrors.address">{{uiErrors.address}}</span>
+          <input class="form-control" formControlName="address" type="text" placeholder="Address Line 1" readonly />
+          <span *ngIf="uiErrors.address" class="text-danger">{{uiErrors.address}}</span>
         </div>
         <div class="form-group">
           <input class="form-control" formControlName="bvn" type="hidden" placeholder="BVN" />
-          <span *ngIf="uiErrors.bvn">{{uiErrors.bvn}}</span>
+          <span *ngIf="uiErrors.bvn" class="text-danger">{{uiErrors.bvn}}</span>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="motherMaidenName">Mother's Maiden Name</label>
+              <input formControlName="mothersMaidenName" type="text" class="form-control" placeholder="Your Mother's Maiden Name">
+              <span *ngIf="uiErrors.mothersMaidenName" class="text-danger">{{uiErrors.mothersMaidenName}}</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="placeOfBirth">Place of Birth</label>
+              <input formControlName="placeOfBirth" type="text" class="form-control" placeholder="Your Place of Birth">
+              <span *ngIf="uiErrors.placeOfBirth" class="text-danger">{{uiErrors.placeOfBirth}}</span>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label for="email" *ngIf="myForm.get('email')?.value">Email</label>
-          <input class="form-control" formControlName="email" type="email" placeholder="Email" />
-          <span *ngIf="uiErrors.email">{{uiErrors.email}}</span>
+          <input class="form-control" formControlName="email" type="email" placeholder="Email" [readonly]="myForm.get('email')?.value" />
+          <span *ngIf="uiErrors.email" class="text-danger">{{uiErrors.email}}</span>
         </div>
         <div class="form-group has-search">
           <label for="email" *ngIf="myForm.get('password')?.value">Password</label>
@@ -72,12 +88,12 @@
           }"></span>
           <input formControlName="password" [type]="container['fieldTextType'] ? 'text' : 'password'"
               class="form-control" placeholder="Password" (keyup)="controlChanged('password')" />
-          <span *ngIf="uiErrors.password != ''">{{uiErrors.password }}</span>
+          <span *ngIf="uiErrors.password != ''" class="text-danger">{{uiErrors.password }}</span>
         </div>
         <div class="form-group">
           <label for="confirmPassword" *ngIf="myForm.get('confirmPassword')?.value">Confirm Password</label>
           <input class="form-control" id="confirmPassword" formControlName="confirmPassword" type="password" placeholder="Confirm Password" (keyup)="controlChanged('confirmPassword')" />
-          <span *ngIf="uiErrors.confirmPassword">{{uiErrors.confirmPassword }}</span>
+          <span *ngIf="uiErrors.confirmPassword" class="text-danger">{{uiErrors.confirmPassword }}</span>
         </div>
         <div class="form-group">
           <input class="d-md-inline" formControlName="accept" type="checkbox" style="width: 40px;"/>

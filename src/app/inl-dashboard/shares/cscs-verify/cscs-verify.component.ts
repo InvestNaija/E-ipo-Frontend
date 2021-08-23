@@ -101,7 +101,7 @@ export class VerifyCscsComponent implements OnInit {
     }
     console.log(this.myForm.value);
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
-    fd.cscsNo = fd.cscsNo.toString()
+    fd.cscsNo = fd.cscsNo.toString();
     this.apiService.patch('/api/v1/verifications/cscs/no-verification', fd)
       .pipe(
         switchMap(resp => {

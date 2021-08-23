@@ -1,0 +1,10 @@
+button {
+  font-style: normal;
+  color: #002B43;
+  border: none;
+  opacity: 0.4;
+
+  &:hover {
+      opacity: 1;
+  }
+}

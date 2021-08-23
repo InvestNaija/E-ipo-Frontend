@@ -68,6 +68,10 @@ export class InlDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('loading dashboard component');
     this.setupSideBar();
 
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/']);
+    }
+
     if(!this.auth.getToken()) {
       this.logout();
     }

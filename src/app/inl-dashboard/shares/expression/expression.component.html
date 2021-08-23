@@ -1,7 +1,7 @@
 <div class="container-fluid p-4">
   <div class="row">
     <div class="col-12">
-      <a [routerLink]="['/dashboard/index']" class="text-dark text-decoration-none">< Back</a>
+      <in-backbutton></in-backbutton>
       <div class="page-title">
         <h1>{{share?.name}}</h1>
       </div>
@@ -22,7 +22,7 @@
                   <div class="ml-2" style="margin-left: 10px;">
                     <h3 class="font-weight-bold text-muted mb-1">{{share?.name}}</h3>
                     <p class="m-0">{{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}} - {{share?.anticipatedMaxPrice | currency:share?.currency:"symbol-narrow"}}</p>
-                    <p class="m-0 text-success font-weight-bold">+0 (+0%)</p>
+                    <!-- <p class="m-0 text-success font-weight-bold">+0 (+0%)</p> -->
                   </div>
                 </div>
               </div>
@@ -39,8 +39,8 @@
               </div>
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
-                  <p class="text-muted font-weight-bold">Asset Price ({{share?.currency}})</p>
-                  <input formControlName="sharePrice" class="form-control" type="text" placeholder="Asset Price" />
+                  <p class="text-muted font-weight-bold">Purchase Price ({{share?.currency}})</p>
+                  <input formControlName="sharePrice" class="form-control" type="text" placeholder="Purchase Price" />
                   <span *ngIf="uiErrors.sharePrice">{{uiErrors.sharePrice}}</span>
                 </div>
               </div>

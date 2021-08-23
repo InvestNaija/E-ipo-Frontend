@@ -43,11 +43,7 @@ export class MakePaymentComponent implements OnInit {
           return this.appContext.userInformationObs()
               .pipe(
                   map(user => {
-                    if(!user.mothersMaidenName || !user.placeOfBirth) {
-                      localStorage.setItem('making-payment', JSON.stringify({id: params.get('txnId'), asset: {id: params.get('assetId')}}));
-                      Swal.fire('Error', 'Some regulatory information are required. Please complete to continue.','error');
-                      this.router.navigateByUrl(`/dashboard/user/kyc`);
-                    } else if (!user.bankCode || !user.nuban) {
+                    if (!user.bankCode || !user.nuban) {
                       localStorage.setItem('making-payment', JSON.stringify({id: params.get('txnId'), asset: {id: params.get('assetId')}}));
                       Swal.fire('Error', 'Your settlement bank information is not available. Please complete to continue.','error');
                       this.router.navigateByUrl(`/dashboard/user/banks`);

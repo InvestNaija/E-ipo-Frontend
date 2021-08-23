@@ -54,7 +54,7 @@ export class ApplicationContextService {
                 } else {
                   Swal.fire({
                     title: 'A CSCS account number would be created for you',
-                    text: "Your CSCS number is mandatory to complete a transaction",
+                    text: "Your CSCS number is mandatory/required to complete your application",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

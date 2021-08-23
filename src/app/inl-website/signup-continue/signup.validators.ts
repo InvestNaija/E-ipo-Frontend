@@ -21,6 +21,12 @@ export const ValidationMessages  = {
   'bvn' : {
       'required': 'BVN is required',
   },
+  'mothersMaidenName' : {
+      'required': 'Mother Maiden Name is required',
+  },
+  'placeOfBirth' : {
+      'required': 'Place Of Birth is required',
+  },
   'password' : {
     'required': 'Password is required',
     'minlength': 'Must be minimum of 6 characters',
@@ -44,7 +50,7 @@ export let FormErrors = {
   phone: '',
   birthdate: '',
   email: '',
-  bvn: '',
+  bvn: '', mothersMaidenName: '', placeOfBirth: '',
   address: '',
   signature: '',
   password: '',
@@ -64,9 +70,10 @@ export interface KYCDetail {
     lga: string,
     state: string
   },
+  residentialAddress: string,
   email: string,
   photo: string,
   nin: number,
-  bvn: number,
+  bvn: number, mothersMaidenName: string, placeOfBirth: string,
   signature: string
 }
