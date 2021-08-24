@@ -20,7 +20,7 @@ const routes: Routes = [
       { path: 'signup', component: InlSignupComponent },
       { path: 'signup-continue', canActivate: [SignupGuard],
           component: InlSignupContinueComponent },
-      { path: 'verify-otp', canActivate: [SignupGuard],
+      { path: 'verify-otp',
           component: InlVerifyOtpComponent },
       { path: '', redirectTo: '/auth/login', pathMatch: 'full'},
     ]
