@@ -21,7 +21,9 @@
               <div class="card-body">
                 <img [src]="asset?.image" style="height: 60px;" alt="{{asset.name}}"/>
                 <p class="shares-name mt-2 mb-0">{{asset.name}}</p>
-                <p class="shares-value m-0">{{asset.sharePrice | currency:asset.currency:'symbol-narrow'}}</p>
+                <h5 class="shares-value m-0">
+                  {{asset.sharePrice ? (asset.sharePrice | currency:asset.currency:'symbol-narrow') : 'Pending price discovery'}}
+                </h5>
                 <!-- <div class="shares-flow">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="d-inline"><path d="M16.2102 16H7.79019C7.45778 16.0005 7.13203 15.9068 6.85064 15.7299C6.56925 15.5529 6.34373 15.2998 6.20019 15C6.03216 14.6443 5.96744 14.2485 6.01341 13.8577C6.05938 13.467 6.21419 13.097 6.46019 12.79L10.6702 7.69001C10.8354 7.49938 11.0397 7.34649 11.2691 7.24171C11.4986 7.13693 11.7479 7.0827 12.0002 7.0827C12.2525 7.0827 12.5018 7.13693 12.7312 7.24171C12.9607 7.34649 13.165 7.49938 13.3302 7.69001L17.5402 12.79C17.7862 13.097 17.941 13.467 17.987 13.8577C18.0329 14.2485 17.9682 14.6443 17.8002 15C17.6566 15.2998 17.4311 15.5529 17.1497 15.7299C16.8684 15.9068 16.5426 16.0005 16.2102 16Z" fill="#00BA88"></path></svg>
                   <p class="ml-2 d-inline">+0.00<span class="d-inline">(0.00%)</span></p>

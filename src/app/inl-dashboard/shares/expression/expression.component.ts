@@ -65,8 +65,8 @@ export class ExpressionComponent implements OnInit {
     // console.log(expression);
     this.myForm.patchValue({
       type: expression?.type,
-      sharePrice: expression?.sharePrice,
-      units: expression?.units,
+      sharePrice: expression?.sharePrice ? expression?.sharePrice : null,
+      units: expression?.units ? expression?.units : 0,
       amount: expression?.amount
     });
     this.myForm.get('amount').setValidators([Validators.required,Validators.min(this.share.anticipatedMinPrice)]);
@@ -78,7 +78,7 @@ export class ExpressionComponent implements OnInit {
   }
   amountChanged(ctrlName: string) {
     this.myForm.patchValue({
-      units: +this.myForm.get(ctrlName).value / +this.myForm.get('sharePrice').value
+      units: this.myForm.get('sharePrice').value ? +this.myForm.get(ctrlName).value / +this.myForm.get('sharePrice').value : 0
     })
     this.errors = this.commonServices.controlnvalid(this.myForm.get(ctrlName) as FormControl);
     this.displayErrors();
@@ -104,9 +104,12 @@ export class ExpressionComponent implements OnInit {
       return;
     }
     const fd = {
-      units: this.myForm.get('units').value,
+      units: this.myForm.get('units').value ? this.myForm.get('units').value : 0,
+      amount: this.myForm.get('amount').value,
       assetId: this.assetId
     };
+    // console.log(fd); return
+
     // this.APIResponse = false; this.submitting = false;
     this.apiService.post(`/api/v1/reservations/express-interest`, fd)
       .subscribe(response => {
