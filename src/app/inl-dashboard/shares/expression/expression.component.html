@@ -40,7 +40,7 @@
               <div class="col-6">
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Purchase Price ({{share?.currency}})</p>
-                  <input formControlName="sharePrice" class="form-control" type="text" placeholder="Purchase Price" />
+                  <input formControlName="sharePrice" class="form-control" type="text" [placeholder]="myForm.get('sharePrice').value?'Purchase Price':'Pending Price Discovery'" />
                   <span *ngIf="uiErrors.sharePrice">{{uiErrors.sharePrice}}</span>
                 </div>
               </div>

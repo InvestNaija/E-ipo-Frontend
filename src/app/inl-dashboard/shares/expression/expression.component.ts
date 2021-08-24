@@ -61,7 +61,6 @@ export class ExpressionComponent implements OnInit {
 
     //
   }
-
   populateExpression(expression: IExpression) {
     // console.log(expression);
     this.myForm.patchValue({
@@ -71,9 +70,11 @@ export class ExpressionComponent implements OnInit {
       amount: expression?.amount
     });
     this.myForm.get('amount').setValidators([Validators.required,Validators.min(this.share.anticipatedMinPrice)]);
-    // this.myForm.get('units').setValidators([Validators.required,Validators.min(this.share.sharePrice)]);
     this.myForm.get('amount').updateValueAndValidity();
-    // this.myForm.get('units').updateValueAndValidity();
+    if(!expression?.sharePrice) {
+      this.myForm.controls['units'].disable();
+    }
+
   }
   amountChanged(ctrlName: string) {
     this.myForm.patchValue({

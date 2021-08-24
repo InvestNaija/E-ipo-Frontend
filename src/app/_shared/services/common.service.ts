@@ -69,6 +69,27 @@ export class CommonService {
     }
   }
 
+  crossFieldValidation(controlName: string, matchingControlName: string, errorToCheck: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      let error = {};
+      error[errorToCheck] = true;
+
+      if (matchingControl.errors && !matchingControl.errors[errorToCheck]) {
+          return;
+      }
+      if ((control.value !== matchingControl.value) && errorToCheck == 'mustMatch') {
+        matchingControl.setErrors(error);
+      } else if ((control.value) && errorToCheck == 'required') {
+        matchingControl.setErrors(error);
+      } else {
+        matchingControl.setErrors(null);
+      }
+    }
+  }
+
   regexValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
     return (control: AbstractControl): {[key: string]: any} => {
       if (!control.value) {

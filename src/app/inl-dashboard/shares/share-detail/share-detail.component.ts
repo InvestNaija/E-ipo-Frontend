@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 import { IShare } from '../../_models/share.model';
 import { ApiService } from '@app/_shared/services/api.service';
@@ -13,6 +14,7 @@ import { CommonService } from '@app/_shared/services/common.service';
 })
 export class ShareDetailComponent implements OnInit {
 
+  paying = false;
   share: IShare;
 
   constructor(
@@ -20,6 +22,7 @@ export class ShareDetailComponent implements OnInit {
     private aRoute: ActivatedRoute,
     private api: ApiService,
     public commonServices: CommonService,
+    private toastr: ToastrService
     ) { }
 
   ngOnInit(): void {
@@ -33,7 +36,14 @@ export class ShareDetailComponent implements OnInit {
       this.share = response.data;
     })
   }
-  onExpressInterest(share: IShare) {
+  onExpressInterest(share: IShare, terms: boolean) {
+    this.paying = true;
+
+    if(!terms) {
+      this.paying = false;
+      this.toastr.error('Terms and Condition needs to be accepted', '500: Error');
+      return;
+    }
     this.router.navigateByUrl(`/dashboard/shares/details/${share.id}/expression-of-interest`)
   }
 }

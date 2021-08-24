@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="col-sm-12 col-md-2">
-      <button class="btn btn-danger text-white"  (click)="onExpressInterest(share)">Purchase</button>
+      <button class="btn btn-danger text-white"  (click)="onExpressInterest(share,terms.checked)">Purchase</button>
     </div>
   </div>
   <div class="row">
@@ -55,7 +55,7 @@
               <p class="text-muted font-weight-bold">Share Price</p>
             </div>
             <div class="col-6">
-              <p class="text-dark font-weight-bold">{{share?.sharePrice | number}}</p>
+              <p class="text-dark font-weight-bold">{{share?.sharePrice ? (share?.sharePrice | number) : 'Pending Price Discovery'}}</p>
             </div>
             <div class="col-6">
               <p class="text-muted font-weight-bold">Shares Avaliable for Sale</p>
@@ -80,8 +80,27 @@
     <div class="col-md-6">
       <div class="card" style="min-height: 316px;">
         <div class="card-body">
-          <h2 class="card-title text-dark text-muted">About {{share?.name | uppercase}}</h2>
-          <div [innerHtml]="share?.description"></div>
+          <div class="row term-and-agreement mt-3">
+            <div class="col-12">
+              <h2 class="card-title text-dark text-muted">About {{share?.name | uppercase}}</h2>
+              <div [innerHtml]="share?.description"></div>
+            </div>
+          </div>
+
+          <div class="row term-and-agreement mt-5">
+            <div class="col-1">
+              <label class="checkbox-container">
+                <input type="checkbox" #terms checked="checked">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <div class="col-11 pl-2">
+              <p>I have read and accept the description, purchase conditions, and understand the
+                <a href="/terms-and-conditions" target="_blank">Terms and Conditions</a>
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
