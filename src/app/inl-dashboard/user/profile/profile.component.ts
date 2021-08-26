@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'in-profile',
@@ -39,6 +40,7 @@ export class ProfileComponent implements OnInit {
     styleProgressIndicatorPosition: 'right bottom',
     styleButtonRemoveItemPosition: 'left bottom',
     styleButtonProcessItemPosition: 'right bottom',
+    maxFileSize: '1MB',
   };
   uploadedImage: string;
 
@@ -49,6 +51,7 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private apiService: ApiService,
+    private toastr: ToastrService,
     private appContext: ApplicationContextService,
     private datePipe: DatePipe
     ) { }
@@ -86,7 +89,10 @@ export class ProfileComponent implements OnInit {
   }
 
   pondHandleAddFile(event: any) {
-    console.log(this.firstFile)
+    if(event.error) {
+      this.toastr.error(event.error.sub, event.error.main);
+      return;
+    }
     this.uploadedImage = event.file.getFileEncodeDataURL();
   }
   onUploadImage() {

@@ -5,6 +5,8 @@ import { ApiService } from '@app/_shared/services/api.service';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 import { AuthService } from '@app/_shared/services/auth.service';
 import { CommonService } from '@app/_shared/services/common.service';
+import { environment } from '@environments/environment';
+import { ToastrService } from 'ngx-toastr';
 import { switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { FormErrors, ValidationMessages } from './documents.validators';
@@ -51,10 +53,12 @@ export class DocumentsComponent implements OnInit {
   pondOptions = {
     class: 'my-filepond',
     labelIdle: 'Drop files here',
-    acceptedFileTypes: 'image/png, image/jpeg, image/gif'
+    acceptedFileTypes: 'image/png, image/jpeg, image/gif, application/pdf',
+    maxFileSize: '1MB'
   };
   constructor(
     private apiService: ApiService,
+    private toastr: ToastrService,
     private auth: AuthService,
     private http: HttpClient,
     private appContext: ApplicationContextService,
@@ -67,6 +71,7 @@ export class DocumentsComponent implements OnInit {
         return this.appContext.userInformationObs();
       }),
       switchMap(loading => {
+        // return this.apiService.get('/api/v1/customers/upload-kyc-documents');
         return this.apiService.get('/api/v1/customers/documents/kyc');
       }),
     ).subscribe(documents => {
@@ -99,20 +104,23 @@ export class DocumentsComponent implements OnInit {
     console.log(file)
   }
   pondHandleAddFile(document, event: any) {
-    // console.log( = .firstFile)
+    if(event.error) {
+      this.toastr.error(event.error.sub, event.error.main);
+      return;
+    }
     document.selectedFile = event.file.getFileEncodeDataURL();
   }
   onSaveFile(document: any) {
     if(!document.IdType) {
-      Swal.fire('', `Please select ${document.title} type first`, 'error');
+      this.toastr.error(`Please select ${document.title} type first`, 'error');
       return;
     }
     if(document.IdType?.code !== 'utility' && document.IdType?.code !== 'signature' && !document.idNumber ) {
-      Swal.fire('', `You need to provide ${document.title} number`, 'error');
+      this.toastr.error(`You need to provide ${document.title} number`, 'error');
       return;
     }
     if(!document.selectedFile ) {
-      Swal.fire('', `No image uploaded for ${document.title}`, 'error');
+      this.toastr.error( `No image uploaded for ${document.title}`, 'error');
       return;
     }
     Swal.fire({
@@ -133,7 +141,8 @@ export class DocumentsComponent implements OnInit {
         let headers = new HttpHeaders()
           .append('Authorization', `${this.auth.getToken()}`);
           document.loading = true;
-        this.http.post('/api/v1/customers/upload-kyc-documents', fd, {headers: headers})
+        this.http.post(`${environment.apiUrl}/api/v1/customers/upload-kyc-documents`, fd, {headers: headers})
+        // this.apiService.post('/api/v1/customers/upload-kyc-documents', fd)
             .subscribe((response: any) => {
               document.loading = false;
               Swal.fire('Great!', response?.message, 'success')
@@ -141,7 +150,7 @@ export class DocumentsComponent implements OnInit {
             errResp => {
               document.loading = false;
               Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
-            })
+            });
       }
     });
   }

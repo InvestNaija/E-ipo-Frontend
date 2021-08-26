@@ -64,7 +64,7 @@ export class ExpressionComponent implements OnInit {
   populateExpression(expression: IExpression) {
     // console.log(expression);
     this.myForm.patchValue({
-      type: expression?.type,
+      type: expression?.type == 'ipo' ? 'PUBLIC OFFER' : expression?.type,
       sharePrice: expression?.sharePrice ? expression?.sharePrice : null,
       units: expression?.units ? expression?.units : 0,
       amount: expression?.amount

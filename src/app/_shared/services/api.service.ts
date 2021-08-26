@@ -27,6 +27,11 @@ export class ApiService {
     return this.request('POST', url, useToken, body);
   }
 
+  postFormData(url: string, formData: Object): Observable<any> {
+    let headers = new HttpHeaders().append('Authorization', `${this.auth.getToken()}`);
+    return this.http.post(url, formData, {headers});
+  }
+
   put(url: string, body: Object, useToken: boolean = true): Observable<any> {
     return this.request('PUT', url, useToken, body);
   }

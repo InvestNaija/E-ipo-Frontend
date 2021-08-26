@@ -74,7 +74,7 @@ export class InlLoginComponent implements OnInit {
           this.router.navigate([this.auth.redirectUrl]);
           this.auth.redirectUrl = '';
         } else {
-          localStorage.setItem('rememberMe', fd.rememberMe)
+          fd.rememberMe ? localStorage.setItem('rememberMe', fd.rememberMe) : 0;
           this.router.navigate(['/dashboard']);
         }
       },

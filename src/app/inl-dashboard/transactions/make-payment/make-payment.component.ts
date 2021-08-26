@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import Swal from 'sweetalert2';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 
@@ -16,7 +16,9 @@ import { ApplicationContextService } from '@app/_shared/services/application-con
   templateUrl: './make-payment.component.html',
   styleUrls: ['./make-payment.component.scss']
 })
-export class MakePaymentComponent implements OnInit {
+export class MakePaymentComponent implements OnInit, OnDestroy {
+
+  initSubscription$: Subscription;
 
   paying = false;
   share: IShare;
@@ -38,7 +40,7 @@ export class MakePaymentComponent implements OnInit {
   ngOnInit(): void {
     // Get Asset details
     // Check if KYC data is complete
-    this.aRoute.paramMap.pipe(
+    this.initSubscription$ = this.aRoute.paramMap.pipe(
         switchMap(params => {
           return this.appContext.userInformationObs()
               .pipe(
@@ -90,5 +92,11 @@ export class MakePaymentComponent implements OnInit {
         this.paying = false;
         Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
       });
+  }
+
+  ngOnDestroy(): void {
+    if(this.initSubscription$) {
+      this.initSubscription$.unsubscribe();
+    }
   }
 }

@@ -40,7 +40,8 @@ export class AuthService {
     //     {'Authorization': `Bearer ${this.getToken()}`}
     // }).pipe(
     //   tap(x =>
-        localStorage.removeItem(this.landlordStorageKey)
+        localStorage.removeItem(this.landlordStorageKey);
+        localStorage.clear();
     //   )
     // ).subscribe(
       // res => {

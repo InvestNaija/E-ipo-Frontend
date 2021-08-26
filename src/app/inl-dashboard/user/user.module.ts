@@ -26,6 +26,7 @@ import FilePondPluginImageCrop from 'filepond-plugin-image-crop/dist/filepond-pl
 import FilePondPluginImageResize from 'filepond-plugin-image-resize/dist/filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform/dist/filepond-plugin-image-transform';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode/dist/filepond-plugin-file-encode';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size';
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -34,7 +35,8 @@ registerPlugin(
   FilePondPluginImageCrop,
   FilePondPluginImageResize,
   FilePondPluginImageTransform,
-  FilePondPluginFileEncode);
+  FilePondPluginFileEncode,
+  FilePondPluginFileValidateSize);
 
 @NgModule({
   declarations: [
