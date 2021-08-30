@@ -45,7 +45,10 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
           return this.appContext.userInformationObs()
               .pipe(
                   map(user => {
-                    if (!user.bankCode || !user.nuban) {
+                    console.log(user);
+
+                    if (!user.bankCode || !user.nuban || user.bankCode == '' || user.nuban == '') {
+                      console.log(user.bankCode, user.nuban);
                       localStorage.setItem('making-payment', JSON.stringify({id: params.get('txnId'), asset: {id: params.get('assetId')}}));
                       Swal.fire('Error', 'Your settlement bank information is not available. Please complete to continue.','error');
                       this.router.navigateByUrl(`/dashboard/user/banks`);

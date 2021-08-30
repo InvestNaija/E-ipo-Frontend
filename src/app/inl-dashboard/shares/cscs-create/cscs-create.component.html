@@ -44,7 +44,10 @@
               <div class="col-6">
                 <div class="form-group inl-form-input">
                   <label for="Country" *ngIf="myForm.get('Country').value">Country</label>
-                  <input id="Country" formControlName="Country" class="form-control" type="text" placeholder="Country" />
+                  <ng-select [searchable]="false" [clearable]="false" labelForId="type" formControlName="Country" placeholder="Select Country">
+                    <ng-option value="Nigeria">Nigeria</ng-option>
+                  </ng-select>
+                  <!-- <input id="Country" formControlName="Country" class="form-control" type="text" placeholder="Country" /> -->
                   <span *ngIf="uiErrors.Country">{{uiErrors.Country}}</span>
                 </div>
               </div>
@@ -53,7 +56,10 @@
               <div class="col-6">
                 <div class="form-group inl-form-input">
                   <label for="Citizen" *ngIf="myForm.get('Citizen').value">Nationality</label>
-                  <input id="Citizen" formControlName="Citizen" class="form-control" type="text" placeholder="Nationality" />
+                  <ng-select [searchable]="false" [clearable]="false" labelForId="type" formControlName="Citizen" placeholder="Select Nationality">
+                    <ng-option value="Nigerian">Nigerian</ng-option>
+                  </ng-select>
+                  <!-- <input id="Citizen" formControlName="Citizen" class="form-control" type="text" placeholder="Nationality" /> -->
                   <span *ngIf="uiErrors.Citizen">{{uiErrors.Citizen}}</span>
                 </div>
               </div>

@@ -45,10 +45,10 @@ export class CscsCreateComponent implements OnInit {
     this.myForm = this.fb.group({
       fullName: [{value: '', disabled: true}, [Validators.required]],
       MaidenName: ['', [Validators.required]],
-      City: ['', [Validators.required]],
-      Country: ['', [Validators.required]],
-      Citizen: ['', [Validators.required]],
-      PostalCode: ['', [Validators.required]],
+      City: [null, [Validators.required]],
+      Country: [null, [Validators.required]],
+      Citizen: [null, [Validators.required]],
+      PostalCode: [null, [Validators.required]],
     });
 
     this.aRoute.paramMap
