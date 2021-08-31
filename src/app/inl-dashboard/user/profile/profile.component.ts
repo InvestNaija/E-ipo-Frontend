@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   pondFiles = [];
   pondOptions = {
     class: 'my-filepond',
-    labelIdle: 'Drop files here',
+    labelIdle: 'Drop files here or Browse <br><span style="font-size:small">(png/jpg/gif. Max: 1MB)</small>',
     acceptedFileTypes: 'image/jpeg, image/png',
     imagePreviewHeight: 100,
     imageCropAspectRatio: '1:1',
