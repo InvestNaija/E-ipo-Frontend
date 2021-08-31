@@ -53,7 +53,7 @@ export class DocumentsComponent implements OnInit {
   pondOptions = {
     class: 'my-filepond',
     labelIdle: 'Drop files here',
-    acceptedFileTypes: 'image/png, image/jpeg, image/gif, application/pdf',
+    acceptedFileTypes: 'image/png, image/jpeg, image/gif', //  application/pdf
     maxFileSize: '1MB'
   };
   constructor(
