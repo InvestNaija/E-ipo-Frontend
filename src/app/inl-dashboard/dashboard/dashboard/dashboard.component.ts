@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(response => {
         this.topAssets = response.data.filter(o => !o.currency.includes('USD'))
         this.bestAsset.loading = false
-        this.bestAsset.value = response.data.reduce(function(prev, current) {
+        this.bestAsset.value = this.topAssets.reduce(function(prev, current) {
           return (prev.sharePrice > current.sharePrice) ? prev : current
         })
       });

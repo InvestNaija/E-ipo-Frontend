@@ -77,7 +77,7 @@
         </div>
         <div class="form-group">
           <label for="email" *ngIf="myForm.get('email')?.value">Email</label>
-          <input class="form-control" formControlName="email" type="email" placeholder="Email" [readonly]="myForm.get('email')?.value" />
+           <input class="form-control" formControlName="email" type="email" placeholder="Email" />  <!-- [readonly]="myForm.get('email')?.value" /> -->
           <span *ngIf="uiErrors.email" class="text-danger">{{uiErrors.email}}</span>
         </div>
         <div class="form-group has-search">
