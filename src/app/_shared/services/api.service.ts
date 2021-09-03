@@ -17,10 +17,17 @@ export class ApiService {
     private auth: AuthService,
     private toastr: ToastrService,
     private cxnService: ConnectionService
-    ) { }
+  ) { }
 
   get(url: string, useToken: boolean = true): Observable<any> {
     return this.request('GET', url, useToken);
+  }
+
+  getZanibal(url: string): Observable<any> {
+    let headers = new HttpHeaders()
+      .append('Authorization', `Basic ${btoa('chapelhill:C@hapelhill2020')}`)
+      .append('Content-Type', 'application/json');
+    return this.http.get(url, { headers })
   }
 
   post(url: string, body: Object, useToken: boolean = true): Observable<any> {
@@ -29,7 +36,7 @@ export class ApiService {
 
   postFormData(url: string, formData: Object): Observable<any> {
     let headers = new HttpHeaders().append('Authorization', `${this.auth.getToken()}`);
-    return this.http.post(url, formData, {headers});
+    return this.http.post(url, formData, { headers });
   }
 
   put(url: string, body: Object, useToken: boolean = true): Observable<any> {
@@ -57,12 +64,12 @@ export class ApiService {
       headers,
     }
 
-    console.log( 'About to check cxn' );
+    console.log('About to check cxn');
     this.cxnService.monitor().subscribe(isConnected => {
 
-      console.log( 'Checking cxn' );
+      console.log('Checking cxn');
 
-      console.log( isConnected );
+      console.log(isConnected);
       // if (this.isConnected) {
       //   this.noInternetConnection=false;
       // }
@@ -79,13 +86,13 @@ export class ApiService {
   onRequestError(error: HttpErrorResponse) {
 
     if (error.status === 401) {
-      console.log(error.statusText, error.status +': Server Error');
+      console.log(error.statusText, error.status + ': Server Error');
       this.toastr.error('Your session has timed out', 'Authentication Error');
       this.auth.logout();
     }
     if (error.status >= 500 && error.status < 600) {
-      console.log(error.statusText, error.status +': Server Error');
-      this.toastr.error(error.statusText, error.status +': Server Error');
+      console.log(error.statusText, error.status + ': Server Error');
+      this.toastr.error(error.statusText, error.status + ': Server Error');
       return throwError(error);
     }
 
