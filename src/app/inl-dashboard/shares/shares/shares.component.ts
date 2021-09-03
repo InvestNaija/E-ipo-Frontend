@@ -34,7 +34,7 @@ export class SharesComponent implements OnInit  {
     });
   }
   onClickShares(share: any) {
-    this.router.navigate(['dashboard','shares','details',share.id]);
+    this.router.navigate(['dashboard','shares','details', share.id, 'expression-of-interest']);
   }
   fetchShares() {
     return this.api.get(`/api/v1/assets`);
