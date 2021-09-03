@@ -68,7 +68,7 @@
               <div class="col-6">
                 <div class="form-group">
                   <button type="submit" class="auth-button w-100">
-                    <span *ngIf="!submitting">Proceed to make payment >></span>
+                    <span *ngIf="!submitting">Pay Now</span>
                     <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
                   </button>
                 </div>
@@ -83,6 +83,10 @@
           </form>
         </div>
       </div>
+    </div>
+
+    <div class="col-md-6 order-first order-md-last">
+      <in-share-detail></in-share-detail>
     </div>
   </div>
 </div>
