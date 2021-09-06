@@ -67,7 +67,7 @@ export class ExpressionComponent implements OnInit {
     this.apiService.getZanibal('https://mds.zanibal.com/mds/rest/api/v1/research/get-security-overview/symbol?x=NSE&s=MTNN')
       .subscribe(
         response => {
-          this.currentMarketValue = response.openPrice;
+          this.currentMarketValue = response.lastPrice;
         },
         errResp => {
         });

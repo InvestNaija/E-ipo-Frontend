@@ -21,7 +21,7 @@
                   <img [src]="share?.image" alt="{{share?.name}}" style="height: 70px;">
                   <div class="ml-2" style="margin-left: 10px;">
                     <h3 class="font-weight-bold text-muted mb-0 share-name">{{share?.name}}</h3>
-                    <span *ngIf="currentMarketValue" class="current-value">Current market value:
+                    <span *ngIf="currentMarketValue" class="current-value">Current market price:
                       {{currentMarketValue | currency:share?.currency:'symbol-narrow'}}</span>
                     <p class="m-0" *ngIf="share?.anticipatedMinPrice || share?.anticipatedMaxPrice">
                       {{share?.anticipatedMinPrice || 0 | currency:share?.currency:'symbol-narrow'}} -
