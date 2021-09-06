@@ -64,7 +64,7 @@ export class ExpressionComponent implements OnInit {
   }
 
   getCurrentMarketValue() {
-    this.apiService.getZanibal('http://mds.zanibal.com/mds/rest/api/v1/research/get-security-overview/symbol?x=NSE&s=MTNN')
+    this.apiService.getZanibal('https://mds.zanibal.com/mds/rest/api/v1/research/get-security-overview/symbol?x=NSE&s=MTNN')
       .subscribe(
         response => {
           console.log('zanibal', response);
