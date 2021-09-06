@@ -67,7 +67,6 @@ export class ExpressionComponent implements OnInit {
     this.apiService.getZanibal('https://mds.zanibal.com/mds/rest/api/v1/research/get-security-overview/symbol?x=NSE&s=MTNN')
       .subscribe(
         response => {
-          console.log('zanibal', response);
           this.currentMarketValue = response.openPrice;
         },
         errResp => {
