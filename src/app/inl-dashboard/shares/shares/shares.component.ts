@@ -30,7 +30,7 @@ export class SharesComponent implements OnInit  {
       })
     ).subscribe(response => {
       this.loadingSubject.next(false);
-      this.shares = response.data.filter(o => !o.currency.includes('USD'));
+      this.shares = response.data.filter(o => o.type.includes('ipo'));
     });
   }
   onClickShares(share: any) {

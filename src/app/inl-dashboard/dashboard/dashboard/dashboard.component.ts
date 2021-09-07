@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.api.get('/api/v1/assets/top-assets')
       .subscribe(response => {
-        this.topAssets = response.data.filter(o => !o.currency.includes('USD'))
+        this.topAssets = response.data.filter(o => o.type.toLowerCase().includes('ipo'))
         this.bestAsset.loading = false
         this.bestAsset.value = this.topAssets.reduce(function (prev, current) {
           return (prev.sharePrice > current.sharePrice) ? prev : current

@@ -59,7 +59,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
         }),
         map((response: any) => {
           // this.total_count = data.response.totalItems;
-          return response.data.filter(o => !o.asset.type.toLowerCase().includes('fund'));
+          return response.data.filter(o => o.asset.type.toLowerCase().includes('ipo'));
         }),
         catchError(() => {
           return of([]);
