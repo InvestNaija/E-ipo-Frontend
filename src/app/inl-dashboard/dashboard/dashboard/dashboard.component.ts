@@ -39,8 +39,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private loadingSubject = new BehaviorSubject<boolean>(true);
   isLoading$ = this.loadingSubject.asObservable();
   topAssets: any;
-  bestAsset = {loading: true, value: null};
-  totalPortfolio= {loading: true, value: []};
+  bestAsset = { loading: true, value: null };
+  totalPortfolio = { loading: true, value: [] };
 
   constructor(
     private router: Router,
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(response => {
         this.topAssets = response.data.filter(o => !o.currency.includes('USD'))
         this.bestAsset.loading = false
-        this.bestAsset.value = this.topAssets.reduce(function(prev, current) {
+        this.bestAsset.value = this.topAssets.reduce(function (prev, current) {
           return (prev.sharePrice > current.sharePrice) ? prev : current
         })
       });
@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         map((response: any) => {
           // this.total_count = data.response.totalItems;
           // console.log(data)
+          // return response.data.filter(o => !o.asset.type.toLowerCase().includes('fund'));
           return response.data;
         }),
         catchError(() => {
@@ -85,10 +86,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(response => {
         this.totalPortfolio.loading = false;
         let result = [];
-        response
-          .filter(o => !o.asset.currency.includes('USD'))
-          .reduce(function(res, value) {
-          if(value.paid) {
+        response.reduce(function (res, value) {
+          if (value.paid) {
             if (!res[value.asset.currency]) {
               res[value.asset.currency] = { currency: value.asset.currency, amount: 0 };
               result.push(res[value.asset.currency])
@@ -97,7 +96,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           return res;
         }, {});
-        if(result.length === 0) {
+        if (result.length === 0) {
           result.push({ currency: null, amount: 0 });
         }
         this.totalPortfolio.value = result;
@@ -129,14 +128,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.deleting=true;
+        this.deleting = true;
         this.api.delete(`/api/v1/reservations/cancel/${element.id}`)
           .subscribe(response => {
             this.toastr.success(response.message);
-            this.deleting=false;
+            this.deleting = false;
             this.getTransactions();
-          },errResp => {
-            this.deleting=false;
+          }, errResp => {
+            this.deleting = false;
           });
       }
     });

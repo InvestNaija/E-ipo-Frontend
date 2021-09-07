@@ -1,43 +1,48 @@
-<div class="container-fluid p-4">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-md-6">
-      <div class="card" style="min-height: 316px;">
+    <div class="col-md-12">
+      <div class="card">
         <div class="card-body">
           <h3 class="card-title mb-3">Overview</h3>
           <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
               <p class="text-muted font-weight-bold">Application Status</p>
             </div>
-            <div class="col-6">
-              <p class="font-weight-bolder" [ngClass]="share?.openForPurchase ? 'text-success' : 'text-danger'">{{share?.openForPurchase ? "Open" : "Closed"}}</p>
+            <div class="col-md-6">
+              <p class="font-weight-bolder" [ngClass]="share?.openForPurchase ? 'text-success' : 'text-danger'">
+                {{share?.openForPurchase ? "Open" : "Closed"}}</p>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <p class="text-muted font-weight-bold">Offering Type</p>
             </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold text-uppercase">{{share?.type == 'ipo'? 'Public Offer' : share?.type}}</p>
+            <div class="col-md-6">
+              <p class="text-dark font-weight-bold text-uppercase">
+                {{share?.type == 'ipo'? 'Public Offer' : share?.type}}</p>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <p class="text-muted font-weight-bold">Share Price</p>
             </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold">{{share?.sharePrice ? (share?.sharePrice | currency:share?.currency:'symbol-narrow') : 'Pending Price Discovery'}}</p>
+            <div class="col-md-6">
+              <p class="text-dark font-weight-bold">
+                {{share?.sharePrice ? (share?.sharePrice | currency:share?.currency:'symbol-narrow') : 'Pending Price Discovery'}}
+              </p>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <p class="text-muted font-weight-bold">Shares Avaliable for Sale</p>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <p class="text-dark font-weight-bold">{{share?.availableShares | number}}</p>
             </div>
             <!-- <div class="col-6">
               <p class="text-muted font-weight-bold">Maximum Price</p>
               <p class="text-dark font-weight-bold">{{share?.anticipatedMaxPrice | number}}</p>
             </div> -->
-            <div class="col-6">
+            <div class="col-md-6">
               <p class="text-muted font-weight-bold">Minimum Price</p>
             </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold">{{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}}</p>
+            <div class="col-md-6">
+              <p class="text-dark font-weight-bold">
+                {{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}}</p>
             </div>
           </div>
         </div>

@@ -20,8 +20,12 @@
                 <div class="d-flex">
                   <img [src]="share?.image" alt="{{share?.name}}" style="height: 70px;">
                   <div class="ml-2" style="margin-left: 10px;">
-                    <h3 class="font-weight-bold text-muted mb-1">{{share?.name}}</h3>
-                    <p class="m-0">{{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}} - {{share?.anticipatedMaxPrice | currency:share?.currency:"symbol-narrow"}}</p>
+                    <h3 class="font-weight-bold text-muted mb-0 share-name">{{share?.name}}</h3>
+                    <span *ngIf="currentMarketValue" class="current-value">Current market price:
+                      {{currentMarketValue | currency:share?.currency:'symbol-narrow'}}</span>
+                    <p class="m-0" *ngIf="share?.anticipatedMinPrice || share?.anticipatedMaxPrice">
+                      {{share?.anticipatedMinPrice || 0 | currency:share?.currency:'symbol-narrow'}} -
+                      {{share?.anticipatedMaxPrice || 0 | currency:share?.currency:"symbol-narrow"}}</p>
                     <!-- <p class="m-0 text-success font-weight-bold">+0 (+0%)</p> -->
                   </div>
                 </div>
@@ -30,32 +34,36 @@
           </div>
           <form [formGroup]="myForm" (ngSubmit)="onSubmit(true)">
             <div class="row border-bottom py-3">
-              <div class="col-6">
+              <div class="col-md-6">
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Offering Type</p>
                   <input formControlName="type" class="form-control" type="text" placeholder="Offering Type" />
                   <span *ngIf="uiErrors.type">{{uiErrors.type}}</span>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-md-6">
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Purchase Price ({{share?.currency}})</p>
-                  <input formControlName="sharePrice" class="form-control" type="text" [placeholder]="myForm.get('sharePrice').value?'Purchase Price':'Pending Price Discovery'" />
+                  <input formControlName="sharePrice" class="form-control" type="text"
+                    [placeholder]="myForm.get('sharePrice').value?'Purchase Price':'Pending Price Discovery'" />
                   <span *ngIf="uiErrors.sharePrice">{{uiErrors.sharePrice}}</span>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-md-6">
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Estimated Amount</p>
-                  <input formControlName="amount" class="form-control" type="number" [min]="share?.anticipatedMinPrice" (keyup)="amountChanged('amount')" placeholder="Estimated Amount" />
+                  <input formControlName="amount" class="form-control" type="number" [min]="share?.anticipatedMinPrice"
+                    (keyup)="amountChanged('amount')" placeholder="Estimated Amount" />
                   <span *ngIf="uiErrors.amount">{{uiErrors.amount}}</span>
-                  <span *ngIf="errors['amount']?.min">Amount cannot be less than {{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}}.</span>
+                  <span *ngIf="errors['amount']?.min">Amount cannot be less than
+                    {{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}}.</span>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-md-6">
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Specified Units</p>
-                  <input formControlName="units" class="form-control" type="number" (keyup)="unitsChanged('units')" placeholder="Specified Units" />
+                  <input formControlName="units" class="form-control" type="number" (keyup)="unitsChanged('units')"
+                    placeholder="Specified Units" />
                   <span *ngIf="uiErrors.units">{{uiErrors.units}}</span>
                 </div>
               </div>
@@ -65,19 +73,21 @@
               <h1><small>{{myForm.get('amount').value | currency:share?.currency:'symbol-narrow' }}</small></h1>
             </div>
             <div class="row border-bottom py-3">
-              <div class="col-6">
+              <div class="col-lg-6">
                 <div class="form-group">
                   <button type="submit" class="auth-button w-100">
                     <span *ngIf="!submitting">Pay Now</span>
-                    <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
+                    <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
                   </button>
                 </div>
               </div>
-              <div class="col-6">
-                <a class="btn w-100" (click)="onSubmit(false)">
-                  <span *ngIf="!submitting">Pay Later</span>
-                  <mat-spinner *ngIf="submitting"[diameter]="30"></mat-spinner>
-                </a>
+              <div class="col-lg-6">
+                <div class="pay-latter-button">
+                  <a class="btn w-100" (click)="onSubmit(false)">
+                    <span *ngIf="!submitting">Pay Later</span>
+                    <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
+                  </a>
+                </div>
               </div>
             </div>
           </form>

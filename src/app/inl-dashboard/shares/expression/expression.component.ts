@@ -28,6 +28,7 @@ export class ExpressionComponent implements OnInit {
 
   total = 0;
   assetId: string;
+  currentMarketValue: any;
 
   constructor(
     private fb: FormBuilder,
@@ -36,13 +37,13 @@ export class ExpressionComponent implements OnInit {
     private apiService: ApiService,
     public commonServices: CommonService,
     private appService: ApplicationContextService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
-      type: [{value: '', disabled: true}, [Validators.required]],
-      sharePrice: [{value: '', disabled: true}, [Validators.required]],
-      units: ['', [Validators.required,Validators.min(1)]],
+      type: [{ value: '', disabled: true }, [Validators.required]],
+      sharePrice: [{ value: '', disabled: true }, [Validators.required]],
+      units: ['', [Validators.required, Validators.min(1)]],
       amount: ['', [Validators.required]],
     });
 
@@ -58,9 +59,20 @@ export class ExpressionComponent implements OnInit {
 
       this.populateExpression(response.data)
     })
-
+    this.getCurrentMarketValue();
     //
   }
+
+  getCurrentMarketValue() {
+    this.apiService.getZanibal('https://mds.zanibal.com/mds/rest/api/v1/research/get-security-overview/symbol?x=NSE&s=MTNN')
+      .subscribe(
+        response => {
+          this.currentMarketValue = response.lastPrice;
+        },
+        errResp => {
+        });
+  }
+
   populateExpression(expression: IExpression) {
     // console.log(expression);
     this.myForm.patchValue({
@@ -69,9 +81,9 @@ export class ExpressionComponent implements OnInit {
       units: expression?.units ? expression?.units : 0,
       amount: expression?.amount
     });
-    this.myForm.get('amount').setValidators([Validators.required,Validators.min(this.share.anticipatedMinPrice)]);
+    this.myForm.get('amount').setValidators([Validators.required, Validators.min(this.share.anticipatedMinPrice)]);
     this.myForm.get('amount').updateValueAndValidity();
-    if(!expression?.sharePrice) {
+    if (!expression?.sharePrice) {
       this.myForm.controls['units'].disable();
     }
 
@@ -113,19 +125,19 @@ export class ExpressionComponent implements OnInit {
     // this.APIResponse = false; this.submitting = false;
     this.apiService.post(`/api/v1/reservations/express-interest`, fd)
       .subscribe(response => {
-        if(isPayingNow){
+        if (isPayingNow) {
           this.submitting = false;
-          let element = {id: response.data.reservation.id, asset:{id: response.data.asset.id}, goToTxns: true};
+          let element = { id: response.data.reservation.id, asset: { id: response.data.asset.id }, goToTxns: true };
           this.appService.checkCSCS(element);
           this.router.navigateByUrl(`/dashboard/transactions`);
         } else {
           this.router.navigateByUrl(`/dashboard/transactions`);
         }
       },
-      errResp => {
-        this.submitting = false;
-        Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
-      });
+        errResp => {
+          this.submitting = false;
+          Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
+        });
   }
 
   displayErrors() {
