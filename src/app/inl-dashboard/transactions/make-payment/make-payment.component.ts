@@ -39,13 +39,15 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Get Asset details
+    this.appContext.userInformation
     // Check if KYC data is complete
     this.initSubscription$ = this.aRoute.paramMap.pipe(
         switchMap(params => {
-          return this.appContext.userInformationObs()
+          // return this.appContext.userInformationObs()
+          return this.apiService.get('/api/v1/customers/profile/fetch')
               .pipe(
-                  map(user => {
-                    console.log(user);
+                  map(response => {
+                    const user = response.data;
 
                     if (!user.bankCode || !user.nuban || user.bankCode == '' || user.nuban == '') {
                       console.log(user.bankCode, user.nuban);
@@ -54,7 +56,7 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
                       this.router.navigateByUrl(`/dashboard/user/banks`);
                     }
                   }),
-                  switchMap(user => {
+                  switchMap(response => {
                       this.commonServices.loading().next(true);
                     return combineLatest([
                               // Name of the asset
