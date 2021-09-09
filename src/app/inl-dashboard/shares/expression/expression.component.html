@@ -72,7 +72,7 @@
               <p class="text-muted font-weight-bold">Total</p>
               <h1><small>{{myForm.get('amount').value | currency:share?.currency:'symbol-narrow' }}</small></h1>
             </div>
-            <div class="row border-bottom py-3">
+            <div class="row border-bottom py-3" *ngIf="share?.openForPurchase">
               <div class="col-lg-6">
                 <div class="form-group">
                   <button type="submit" class="auth-button w-100">
@@ -90,13 +90,22 @@
                 </div>
               </div>
             </div>
+            <div class="row border-bottom py-3" *ngIf="!share?.openForPurchase">
+              <div class="col-lg-12">
+                <div class="pay-latter-button">
+                  <a class="btn btn-lg w-100">
+                    OFFER CLOSED
+                  </a>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
     </div>
 
     <div class="col-md-6 order-first order-md-last">
-      <in-share-detail></in-share-detail>
+      <in-share-detail (termsRead)="onTermsReadChange($event)"></in-share-detail>
     </div>
   </div>
 </div>

@@ -9,6 +9,7 @@ import { CommonService } from '@app/_shared/services/common.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrors, IExpression, ValidationMessages } from './expression.validators';
 import { ApplicationContextService } from '@app/_shared/services/application-context.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'in-expression',
@@ -23,7 +24,7 @@ export class ExpressionComponent implements OnInit {
   formErrors = FormErrors;
   uiErrors = FormErrors;
   validationMessages = ValidationMessages;
-
+  termsRead: boolean;
   submitting = false;
 
   total = 0;
@@ -36,7 +37,8 @@ export class ExpressionComponent implements OnInit {
     private router: Router,
     private apiService: ApiService,
     public commonServices: CommonService,
-    private appService: ApplicationContextService
+    private appService: ApplicationContextService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -56,6 +58,11 @@ export class ExpressionComponent implements OnInit {
     ).subscribe(response => {
       this.commonServices.loading().next(false);
       this.share = response.data;
+
+      const today = new Date();
+      const closingDate = new Date(this.share.closingDate);
+      if(today > closingDate) this.share.openForPurchase = false;
+      else this.share.openForPurchase = true;
 
       this.populateExpression(response.data)
     })
@@ -106,8 +113,17 @@ export class ExpressionComponent implements OnInit {
   onPayLater(isPayingNow: boolean) {
     this.onSubmit(isPayingNow);
   }
+  onTermsReadChange(event){
+    this.termsRead = event;
+  }
   onSubmit(isPayingNow: boolean) {
     this.submitting = true;
+
+    if(!this.termsRead) {
+      this.submitting = false;
+      this.toastr.error('Terms and Condition needs to be accepted', 'Error');
+      return;
+    }
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);

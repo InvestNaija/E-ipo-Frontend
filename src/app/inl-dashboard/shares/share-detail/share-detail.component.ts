@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,8 @@ import { CommonService } from '@app/_shared/services/common.service';
   styleUrls: ['./share-detail.component.scss']
 })
 export class ShareDetailComponent implements OnInit {
+
+  @Output() termsRead = new EventEmitter<boolean>();
 
   paying = false;
   share: IShare;
@@ -35,7 +37,13 @@ export class ShareDetailComponent implements OnInit {
       this.commonServices.loading().next(false);
       this.share = response.data;
     })
+    this.termChecked(true);
   }
+
+  termChecked(value: boolean) {
+    this.termsRead.emit(value);
+  }
+
   onExpressInterest(share: IShare, terms: boolean) {
     this.paying = true;
 

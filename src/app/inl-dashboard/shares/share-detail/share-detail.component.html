@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row mb-2">
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
@@ -63,7 +63,7 @@
           <div class="row term-and-agreement mt-5">
             <div class="col-1">
               <label class="checkbox-container">
-                <input type="checkbox" #terms checked="checked">
+                <input type="checkbox" #terms checked="checked" (change)="termChecked(terms.checked)">
                 <span class="checkmark"></span>
               </label>
             </div>
