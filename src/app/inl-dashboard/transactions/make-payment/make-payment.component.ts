@@ -70,8 +70,8 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
         })
     ).subscribe(([asset, transaction]) => {
       this.commonServices.loading().next(false);
-        console.log(asset, transaction);
-        this.asset = asset.data;
+        console.log(asset.data.asset, transaction);
+        this.asset = asset.data.asset;
         this.transaction = transaction.data;
     });
 
@@ -83,10 +83,12 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
       Swal.fire('', 'Terms and Condition needs to be accepted', 'warning');
       return;
     }
+    const getUrl = window.location;
     const payload = {
       gateway: environment.gateway,
       reservationId: this.transaction.id,
-      currency: this.asset.currency
+      currency: this.asset.currency,
+      redirectURL: getUrl .protocol + "//" + getUrl.host + "/dashboard/transactions"
     }
     this.apiService.post('/api/v1/reservations/make-payment', payload)
       .subscribe(response => {

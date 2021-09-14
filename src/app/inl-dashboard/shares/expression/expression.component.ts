@@ -57,14 +57,14 @@ export class ExpressionComponent implements OnInit {
       })
     ).subscribe(response => {
       this.commonServices.loading().next(false);
-      this.share = response.data;
+      this.share = response.data.asset;
 
       const today = new Date();
       const closingDate = new Date(this.share.closingDate);
       if(today > closingDate) this.share.openForPurchase = false;
       else this.share.openForPurchase = true;
 
-      this.populateExpression(response.data)
+      this.populateExpression(response.data.asset)
     })
     this.getCurrentMarketValue();
     //
@@ -116,6 +116,9 @@ export class ExpressionComponent implements OnInit {
   onTermsReadChange(event){
     this.termsRead = event;
   }
+  termChecked(value: boolean) {
+    this.termsRead = value;
+  }
   onSubmit(isPayingNow: boolean) {
     this.submitting = true;
 
@@ -143,7 +146,9 @@ export class ExpressionComponent implements OnInit {
       .subscribe(response => {
         if (isPayingNow) {
           this.submitting = false;
-          let element = { id: response.data.reservation.id, asset: { id: response.data.asset.id }, goToTxns: true };
+          const getUrl = window.location;
+          const redirectURL = getUrl.protocol + "//" + getUrl.host + "/dashboard/transactions"
+          let element = { id: response.data.reservation.id, asset: { id: response.data.asset.id }, goToTxns: true, redirectURL };
           this.appService.checkCSCS(element);
           this.router.navigateByUrl(`/dashboard/transactions`);
         } else {

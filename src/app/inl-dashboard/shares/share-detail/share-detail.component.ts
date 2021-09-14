@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -15,9 +15,9 @@ import { CommonService } from '@app/_shared/services/common.service';
 export class ShareDetailComponent implements OnInit {
 
   @Output() termsRead = new EventEmitter<boolean>();
+  @Input() share: IShare;
 
   paying = false;
-  share: IShare;
 
   constructor(
     private router: Router,
@@ -35,7 +35,12 @@ export class ShareDetailComponent implements OnInit {
       })
     ).subscribe(response => {
       this.commonServices.loading().next(false);
-      this.share = response.data;
+      // this.share = response.data;
+
+      const today = new Date();
+      const closingDate = new Date(this.share.closingDate);
+      if(today > closingDate) this.share.openForPurchase = false;
+      else this.share.openForPurchase = true;
     })
     this.termChecked(true);
   }
@@ -47,11 +52,11 @@ export class ShareDetailComponent implements OnInit {
   onExpressInterest(share: IShare, terms: boolean) {
     this.paying = true;
 
-    if(!terms) {
-      this.paying = false;
-      this.toastr.error('Terms and Condition needs to be accepted', '500: Error');
-      return;
-    }
+    // if(!terms) {
+    //   this.paying = false;
+    //   this.toastr.error('Terms and Condition needs to be accepted', '500: Error');
+    //   return;
+    // }
     this.router.navigateByUrl(`/dashboard/shares/details/${share.id}/expression-of-interest`)
   }
 }
