@@ -71,7 +71,7 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
     ).subscribe(([asset, transaction]) => {
       this.commonServices.loading().next(false);
         console.log(asset.data.asset, transaction);
-        this.asset = asset.data.asset;
+        this.asset = asset.data;
         this.transaction = transaction.data;
     });
 

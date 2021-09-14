@@ -57,14 +57,14 @@ export class ExpressionComponent implements OnInit {
       })
     ).subscribe(response => {
       this.commonServices.loading().next(false);
-      this.share = response.data.asset;
+      this.share = response.data;
 
       const today = new Date();
       const closingDate = new Date(this.share.closingDate);
       if(today > closingDate) this.share.openForPurchase = false;
       else this.share.openForPurchase = true;
 
-      this.populateExpression(response.data.asset)
+      this.populateExpression(response.data)
     })
     this.getCurrentMarketValue();
     //
