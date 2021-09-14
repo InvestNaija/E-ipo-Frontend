@@ -85,9 +85,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       )
       .subscribe(response => {
         this.totalPortfolio.loading = false;
+        // console.log(response);
+
         let result = [];
-        response.reduce(function (res, value) {
-          if (value.paid) {
+        response
+        // .reduce((acc, curr) => {
+        //   if (curr.asset.type.toLowerCase() !== 'ipo') acc.push(curr);
+        //   return acc;
+        // }, [])
+        // .reduce(o => {
+        //   // console.log(o.asset.type);
+
+        //   return o.asset.type.toLowerCase().includes('ipo')
+        // })
+        .reduce(function (res, value) {
+          // console.log(res);
+
+          if (value.paid && value.asset.type.toLowerCase().includes('ipo')) {
             if (!res[value.asset.currency]) {
               res[value.asset.currency] = { currency: value.asset.currency, amount: 0 };
               result.push(res[value.asset.currency])
@@ -96,12 +110,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           return res;
         }, {});
+        console.log(response);
+
         if (result.length === 0) {
           result.push({ currency: null, amount: 0 });
         }
+
+        const tableData = response.filter(o => o.asset.type.toLowerCase().includes('ipo'));
+        // console.log(tableData, response);
+
         this.totalPortfolio.value = result;
         this.loadingSubject.next(false);
-        this.dataSource = new MatTableDataSource(response);
+        this.dataSource = new MatTableDataSource(tableData);
 
         this.dataSource.filterPredicate = (data: PeriodicElement, filter: string) => {
           return data.status.trim().toLowerCase() == filter;
