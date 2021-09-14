@@ -23,9 +23,10 @@
                     <h3 class="font-weight-bold text-muted mb-0 share-name">{{share?.name}}</h3>
                     <span *ngIf="currentMarketValue" class="current-value">Current market price:
                       {{currentMarketValue | currency:share?.currency:'symbol-narrow'}}</span>
-                    <p class="m-0" *ngIf="share?.anticipatedMinPrice || share?.anticipatedMaxPrice">
+                    <!-- <p class="m-0" *ngIf="share?.anticipatedMinPrice || share?.anticipatedMaxPrice">
                       {{share?.anticipatedMinPrice || 0 | currency:share?.currency:'symbol-narrow'}} -
-                      {{share?.anticipatedMaxPrice || 0 | currency:share?.currency:"symbol-narrow"}}</p>
+                      {{share?.anticipatedMaxPrice || 0 | currency:share?.currency:"symbol-narrow"}}
+                    </p> -->
                     <!-- <p class="m-0 text-success font-weight-bold">+0 (+0%)</p> -->
                   </div>
                 </div>
