@@ -7,6 +7,13 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrModule } from 'ngx-toastr';
 import { BackbuttonComponent } from './components/backbutton/backbutton.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+// import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material/core';
+// import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+
 import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
@@ -25,10 +32,15 @@ import { MatIconModule } from '@angular/material/icon';
     }),
   ],
   exports: [
-    CommonModule, RouterModule, ToastrModule,
-    MatIconModule, BackbuttonComponent,
+    CommonModule, RouterModule, ToastrModule, BackbuttonComponent,
     FormsModule, ReactiveFormsModule,
-    NgSelectModule
-  ]
+    NgSelectModule,
+    MatFormFieldModule, MatInputModule, MatIconModule
+    , MatDatepickerModule, MatNativeDateModule//, MatMomentDateModule
+  ],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    // { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
+  ],
 })
 export class SharedModule { }

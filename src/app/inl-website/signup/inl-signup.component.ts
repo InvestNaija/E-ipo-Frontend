@@ -21,6 +21,7 @@ export class InlSignupComponent implements OnInit {
   uiErrors = FormErrors;
   validationMessages = ValidationMessages;
   APIResponse = false; submitting = false;
+  config
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +56,10 @@ export class InlSignupComponent implements OnInit {
       this.APIResponse = false; this.submitting = false;
       return;
     }
+
+    // const fd = this.myForm.value;
     const fd = JSON.parse(JSON.stringify(this.myForm.value));
+    fd.dob =  new Date(this.myForm.value.dob.getTime() - (this.myForm.value.dob.getTimezoneOffset() * 60000)).toJSON();
     // console.log(fd);return;
 
     this.api.post('/api/v1/verifications/bvn', fd, false)

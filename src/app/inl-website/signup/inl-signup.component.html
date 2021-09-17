@@ -20,10 +20,12 @@
         <input id="email" formControlName="bvn" class="form-control" type="text" placeholder="BVN" (keyup)="controlChanged('bvn')" />
         <span *ngIf="uiErrors.bvn != ''">{{uiErrors.bvn }}</span>
       </div>
-      <div class="form-group">
-        <label for="dob" *ngIf="myForm.get('dob').value">Date of Birth</label>
-        <input id="dob" formControlName="dob" class="form-control" type="date" placeholder="Date Of Birth" (keyup)="controlChanged('dob')" />
-        <span *ngIf="uiErrors.bvn != ''">{{uiErrors.bvn }}</span>
+      <div class="form-group has-search">
+        <label for="dob" *ngIf="myForm.get('dob')?.value">Date Of Birth (DD/MM/YYYY)</label>
+        <mat-datepicker-toggle matSuffix [for]="picker" class="form-control-feedback"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <input formControlName="dob" class="form-control" placeholder="Date Of Birth (DD/MM/YYYY)" matInput [matDatepicker]="picker" (keyup)="controlChanged('dob')" (click)="picker.open()" />
+        <span *ngIf="uiErrors.dob">{{uiErrors.dob }}</span>
       </div>
         <!-- <div class="form-group">
           <label for="email" *ngIf="myForm.get('firstName').value">First Name</label>
@@ -35,13 +37,12 @@
           <input formControlName="lastName" class="form-control" type="text" placeholder="Surname" (keyup)="controlChanged('lastName')" />
           <span *ngIf="uiErrors.lastName != ''">{{uiErrors.lastName }}</span>
         </div> -->
-        <div class="form-group">
-          <!-- <strong class="pull-right"><a routerLink="/auth/forgot-password" class="text-primary">Reset Password</a></strong> -->
-          <button type="submit" class="auth-button">
-            <span *ngIf="!submitting">Continue</span>
-            <mat-spinner *ngIf="submitting"  [diameter]="30"></mat-spinner>
-          </button>
-        </div>
+      <div class="form-group">
+        <button type="submit" class="auth-button">
+          <span *ngIf="!submitting">Continue</span>
+          <mat-spinner *ngIf="submitting"  [diameter]="30"></mat-spinner>
+        </button>
+      </div>
     </form>
   </div>
 </div>
