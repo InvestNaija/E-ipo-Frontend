@@ -16,6 +16,10 @@ const routes: Routes = [
     component: ExpressionComponent
   },
   {
+    path: 'details/:id/expression-of-interest/:reservationId',
+    component: ExpressionComponent
+  },
+  {
     path: 'details/:id/verify-cscs-number',
     component: VerifyCscsComponent
   },

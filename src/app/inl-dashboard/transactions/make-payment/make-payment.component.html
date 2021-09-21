@@ -14,65 +14,72 @@
           <mat-spinner *ngIf="commonServices.isLoading$ | async" color="accent" [diameter]="30"></mat-spinner>
 
           <h3 class="card-title mb-3">Order Summary</h3>
-          <div class="row border-bottom">
-            <div class="col-6">
-              <div class="p-3">
+          <div class="row">
+            <div class="col-12">
+              <div class="border-bottom p-3">
                 <div class="d-flex">
-                  <img [src]="asset?.image" style="height: 40px;">
+                  <img [src]="asset?.image" alt="{{asset?.name}}" style="height: 40px;">
                   <div class="ml-2" style="margin-left: 10px;">
-                    <h4 class="m-0 font-weight-bold">{{asset?.name}}</h4>
+                    <h3 class="font-weight-bold text-muted mb-1">{{asset?.name}}</h3>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- <div class="col-6 text-right">
-              <p class="text-muted font-weight-bold">Transaction Reference</p>
-              <small class="text-dark font-weight-bold">{{ transaction?.id }}</small>
-            </div> -->
           </div>
           <div class="row border-bottom py-3">
-            <div class="col-6">
-              <p class="text-muted font-weight-bold">Price per Share</p>
-            </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold text-uppercase">{{asset?.sharePrice  ? (asset?.sharePrice | currency:asset?.currency:'symbol-narrow') : ('Pending Price Discovery' | titlecase) }}</p>
-            </div>
-            <div class="col-6">
-              <p class="text-muted font-weight-bold">Estimated Units</p>
-            </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold text-uppercase">{{asset?.sharePrice  ? (transaction?.unitsExpressed | number) : 'Pending Price Discovery' }}</p>
-            </div>
-            <div class="col-6">
-              <p class="text-muted font-weight-bold">Total</p>
-            </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold">{{transaction?.amount | currency:asset?.currency:'symbol-narrow'}}</p>
-            </div>
-            <div class="col-6">
-              <p class="text-muted font-weight-bold">Offering Type</p>
-            </div>
-            <div class="col-6">
-              <p class="text-dark font-weight-bold">{{ asset?.type == 'ipo'? 'Public Offer' : asset?.type }}</p>
+            <div class="col-md-12">
+              <div class="row" *ngIf="asset?.type !='bond'">
+                <div class="col-md-6">
+                  <p class="text-muted font-weight-bold">Price per Unit</p>
+                  <p class="text-dark font-weight-bold text-uppercase">{{asset?.sharePrice | currency:asset?.currency:'symbol-narrow' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p class="text-muted font-weight-bold">Estimated Units</p>
+                  <p class="text-dark font-weight-bold">{{transaction?.unitsExpressed | number}}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="text-muted font-weight-bold">Total</p>
+                  <p class="text-dark font-weight-bold">{{transaction?.amount | currency:asset?.currency:'symbol-narrow'}}</p>
+                </div>
+                <div class="col-md-6">
+                  <p class="text-muted font-weight-bold">Offering Type</p>
+                  <p class="text-dark font-weight-bold">{{ asset?.type }}</p>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="row term-and-agreement my-2">
+          <div class="row border-bottom my-4">
+            <div class="col-md-12">
+              <mat-radio-group name="opList" aria-label="Select an option" [(ngModel)]="container['reinvest']">
+                <mat-radio-button class="mr-3" *ngFor="let op of reinvestList" [value]="op.checked" [checked]="op.checked">{{ op.name}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="row my-4">
             <div class="col-1">
               <label class="checkbox-container">
-                <input type="checkbox" #terms checked="checked">
+                <mat-checkbox #terms checked="checked"></mat-checkbox>
                 <span class="checkmark"></span>
               </label>
             </div>
             <div class="col-11 pl-2">
-              <p>I have read and accept the purchase conditions, and understand the
-                <a href="/terms-and-conditions" target="_blank">Terms and Conditions</a>
-              </p>
+              <p>I acknowledge that I have read and understood the prospectus, and agreed with the <a href="/terms-and-conditions" target="_blank">Terms and Conditions</a></p>
             </div>
           </div>
-          <div class="form-group">
-            <button class="auth-button w-100" (click)="onMakePayment(terms.checked)">
-              <span> Pay Now</span>
-            </button>
+          <div class="row border-bottom py-3">
+            <div class="col-6">
+              <div class="form-group">
+                <button type="submit" class="auth-button w-100" (click)="onMakePayment(terms.checked)">
+                  <span *ngIf="!paying">Pay Now</span>
+                  <mat-spinner *ngIf="paying"[diameter]="30"></mat-spinner>
+                </button>
+              </div>
+            </div>
+            <div class="col-6">
+              <button mat-button (click)="openDialog()">Pay directly to bank</button>
+            </div>
           </div>
         </div>
       </div>

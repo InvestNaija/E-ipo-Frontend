@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TransactionsComponent } from './transactions/transactions.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { MakePaymentComponent } from './make-payment/make-payment.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TransactionsComponent,
+    component: DashboardComponent,
   },
   {
     path: ':txnId/:assetId/make-payment',

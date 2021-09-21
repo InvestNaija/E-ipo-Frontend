@@ -75,11 +75,24 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
       });
   }
 
-  onMakePayment(element: any) {
-    this.appService.checkCSCS(element);
+  getOpenForPayment(asset) {
+
+    const today = new Date();
+    const closingDate = new Date(asset.closingDate);
+    if(today > closingDate) asset.openForPurchase = false;
+    else asset.openForPurchase = true;
+
+    return asset.openForPurchase;
   }
 
-  deleting=false;
+  onMakePayment(element: any) {
+    this.router.navigateByUrl(`/dashboard/transactions/${element.id}/${element.asset.id}/make-payment`)
+  }
+
+  onEdit(element: any) {
+    this.router.navigateByUrl(`/dashboard/shares/details/${element.asset.id}/expression-of-interest/${element.id}`)
+  }
+
   onDeleteTransaction(element: any) {
     Swal.fire({
       title: 'Delete transaction',
@@ -92,14 +105,14 @@ export class TransactionsComponent implements OnInit, AfterViewInit  {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.deleting=true;
+        element.deleting=true;
         this.api.delete(`/api/v1/reservations/cancel/${element.id}`)
           .subscribe(response => {
             this.toastr.success(response.message);
-            this.deleting=false;
+            element.deleting=false;
             this.getTransactions();
           },errResp => {
-            this.deleting=false;
+            element.deleting=false;
           });
       }
     });

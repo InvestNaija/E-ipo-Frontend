@@ -292,6 +292,7 @@ a.mat-menu-item {
   word-wrap: normal;
 }
 
+
 .pay-latter-button {
   height: 100%;
   padding-bottom: 1rem;
@@ -308,6 +309,47 @@ a.mat-menu-item {
     &:hover {
       background-color: #e9ecef;
     }
+  }
+}
+mat-radio-button, .mat-radio-label{
+  align-items: start !important;
+  white-space: normal !important;
+  vertical-align: top;
+}
+
+.mobile-label {
+  display: none;
+}
+@media(max-width: 600px) {
+  mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
+    padding-left: 0 !important;
+  }
+  .mobile-label {
+    width: 80px;
+    white-space: nowrap;
+    display: inline-block;
+    font-weight: bold;
+    margin: 0 10px;
+  }
+  .mobile-content {
+    width: 120px;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 0 10px;
+    text-align: start;
+  }
+  .mat-header-row {
+    display: none;
+  }
+  .mat-row {
+    flex-direction: column;
+    align-items:flex-start;
+    justify-content: space-evenly;
+
+  // display: flex;
+    justify-content: space-between;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 8px 10px;
   }
 }
 

@@ -21,6 +21,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SharedModule } from '@app/_shared/shared.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SharedModule } from '@app/_shared/shared.module';
     MatDividerModule,
     MatListModule,
     MatTableModule,
+    MatTooltipModule,
     MatPaginatorModule
   ]
 })

@@ -1,80 +1,69 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import Swal from 'sweetalert2';
-import { combineLatest, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { environment } from '@environments/environment';
+
+import {MatDialog} from '@angular/material/dialog';
 
 import { IShare } from '../../_models/share.model';
 import { ApiService } from '@app/_shared/services/api.service';
 import { CommonService } from '@app/_shared/services/common.service';
-import { ApplicationContextService } from '@app/_shared/services/application-context.service';
+import { BankPaymentComponent } from './bank-payment.component';
 
 @Component({
   selector: 'in-make-payment',
   templateUrl: './make-payment.component.html',
   styleUrls: ['./make-payment.component.scss']
 })
-export class MakePaymentComponent implements OnInit, OnDestroy {
+export class MakePaymentComponent implements OnInit {
 
-  initSubscription$: Subscription;
-
+  container = {'reinvest':true};
+  reinvestList = [
+    {"name": "Scrip (Reinvest your dividends/distributions and compound your returns)", ID: "D1", "checked": true},
+    {"name": "Cash distribution (Collect your dividend)", ID: "D2", "checked": false}
+  ]
   paying = false;
   share: IShare;
   asset: any;
   transaction: any;
 
-  routeAsset: string;
-  routeTxn: string;
-
   constructor(
-    private router: Router,
     private aRoute: ActivatedRoute,
     private apiService: ApiService,
-    private appContext: ApplicationContextService,
     public commonServices: CommonService,
+    public dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document
     ) { }
 
   ngOnInit(): void {
     // Get Asset details
-    this.appContext.userInformation
-    // Check if KYC data is complete
-    this.initSubscription$ = this.aRoute.paramMap.pipe(
-        switchMap(params => {
-          // return this.appContext.userInformationObs()
-          return this.apiService.get('/api/v1/customers/profile/fetch')
-              .pipe(
-                  map(response => {
-                    const user = response.data;
+    this.aRoute.paramMap.pipe(
+      switchMap(params => {
+        this.commonServices.loading().next(true);
+        return combineLatest([
+                  // Name of the asset
+                  this.apiService.get(`/api/v1/assets/${params.get('assetId')}`),
+                  // expression of Interest Id
+                  this.apiService.get(`/api/v1/reservations/fetch/${params.get('txnId')}`)
 
-                    if (!user.bankCode || !user.nuban || user.bankCode == '' || user.nuban == '') {
-                      console.log(user.bankCode, user.nuban);
-                      localStorage.setItem('making-payment', JSON.stringify({id: params.get('txnId'), asset: {id: params.get('assetId')}}));
-                      Swal.fire('Error', 'Your settlement bank information is not available. Please complete to continue.','error');
-                      this.router.navigateByUrl(`/dashboard/user/banks`);
-                    }
-                  }),
-                  switchMap(response => {
-                      this.commonServices.loading().next(true);
-                    return combineLatest([
-                              // Name of the asset
-                              this.apiService.get(`/api/v1/assets/${params.get('assetId')}`),
-                              // expression of Interest Id
-                              this.apiService.get(`/api/v1/reservations/fetch/${params.get('txnId')}`)
-
-                    ]);
-                  })
-                )
-        })
+        ]);
+      })
     ).subscribe(([asset, transaction]) => {
       this.commonServices.loading().next(false);
-        console.log(asset.data.asset, transaction);
         this.asset = asset.data;
         this.transaction = transaction.data;
-    });
 
+    })
+  }
+  openDialog() {
+    const dialogRef = this.dialog.open(BankPaymentComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
   onMakePayment(terms) {
     this.paying = true;
@@ -88,8 +77,11 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
       gateway: environment.gateway,
       reservationId: this.transaction.id,
       currency: this.asset.currency,
+      reinvest: this.container['reinvest'],
       redirectURL: getUrl .protocol + "//" + getUrl.host + "/dashboard/transactions"
     }
+    // console.log(payload); return;
+
     this.apiService.post('/api/v1/reservations/make-payment', payload)
       .subscribe(response => {
         this.paying = false;
@@ -99,11 +91,5 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
         this.paying = false;
         Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
       });
-  }
-
-  ngOnDestroy(): void {
-    if(this.initSubscription$) {
-      this.initSubscription$.unsubscribe();
-    }
   }
 }

@@ -52,9 +52,9 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group col-md-12 inl-form-input">
-                  <p class="text-muted font-weight-bold">Estimated Amount</p>
+                  <p class="text-muted font-weight-bold">Amount</p>
                   <input formControlName="amount" class="form-control" type="number" [min]="share?.anticipatedMinPrice"
-                    (keyup)="amountChanged('amount')" placeholder="Estimated Amount" />
+                    (keyup)="amountChanged('amount')" placeholder="Amount" />
                   <span *ngIf="uiErrors.amount">{{uiErrors.amount}}</span>
                   <span *ngIf="errors['amount']?.min">Amount cannot be less than
                     {{share?.anticipatedMinPrice | currency:share?.currency:'symbol-narrow'}}.</span>
@@ -100,7 +100,9 @@
                   </div>
                   <div class="col-lg-6">
                     <div class="pay-latter-button">
-                      <a class="btn w-100" (click)="onSubmit(false)">
+                      <a class="btn w-100" (click)="onSubmit(false)"
+                      matTooltip="This would save the record in your transactions as pending so you can pay later"
+                      aria-label="Button that displays a tooltip when focused or hovered over">
                         <span *ngIf="!submitting">Pay Later</span>
                         <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
                       </a>

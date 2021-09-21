@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
@@ -29,6 +30,7 @@ export class ExpressionComponent implements OnInit {
 
   total = 0;
   assetId: string;
+  reservationId: string;
   currentMarketValue: any;
 
   constructor(
@@ -53,18 +55,28 @@ export class ExpressionComponent implements OnInit {
       switchMap(params => {
         this.commonServices.loading().next(true);
         this.assetId = params.get('id');
-        return this.apiService.get(`/api/v1/assets/${this.assetId}`);
+        this.reservationId = params.get('reservationId');
+        console.log(this.assetId, this.reservationId);
+
+        return combineLatest([
+          // Name of the asset
+          this.apiService.get(`/api/v1/assets/${this.assetId}`),
+          // expression of Interest Id
+          this.reservationId ? this.apiService.get(`/api/v1/reservations/fetch/${this.reservationId}`) : of([])
+        ])
       })
-    ).subscribe(response => {
+    ).subscribe(([asset, txn]) => {
+      console.log(asset, txn);
+
       this.commonServices.loading().next(false);
-      this.share = response.data;
+      this.share = asset.data;
 
       const today = new Date();
       const closingDate = new Date(this.share.closingDate);
       if(today > closingDate) this.share.openForPurchase = false;
       else this.share.openForPurchase = true;
 
-      this.populateExpression(response.data)
+      this.populateExpression(asset.data, txn?.data)
     })
     this.getCurrentMarketValue();
     //
@@ -80,13 +92,13 @@ export class ExpressionComponent implements OnInit {
         });
   }
 
-  populateExpression(expression: IExpression) {
+  populateExpression(expression: IExpression, transaction) {
     // console.log(expression);
     this.myForm.patchValue({
       type: expression?.type == 'ipo' ? 'PUBLIC OFFER' : expression?.type,
       sharePrice: expression?.sharePrice ? expression?.sharePrice : null,
-      units: expression?.units ? expression?.units : 0,
-      amount: expression?.amount
+      units: transaction?.units ? transaction?.units : 0,
+      amount: transaction?.amount
     });
     this.myForm.get('amount').setValidators([Validators.required, Validators.min(this.share.anticipatedMinPrice)]);
     this.myForm.get('amount').updateValueAndValidity();
@@ -142,13 +154,16 @@ export class ExpressionComponent implements OnInit {
     // console.log(fd); return
 
     // this.APIResponse = false; this.submitting = false;
-    this.apiService.post(`/api/v1/reservations/express-interest`, fd)
+    this.submitEndpoint(fd)
       .subscribe(response => {
         if (isPayingNow) {
           this.submitting = false;
           const getUrl = window.location;
           const redirectURL = getUrl.protocol + "//" + getUrl.host + "/dashboard/transactions"
-          let element = { id: response.data.reservation.id, asset: { id: response.data.asset.id }, goToTxns: true, redirectURL };
+          let element = {
+            id: (this.reservationId ? this.reservationId : response.data.reservation.id ),
+            asset: { id: (this.assetId ? this.assetId: response.data.asset.id) }, goToTxns: true, redirectURL
+          };
           this.appService.checkCSCS(element);
           this.router.navigateByUrl(`/dashboard/transactions`);
         } else {
@@ -159,6 +174,11 @@ export class ExpressionComponent implements OnInit {
           this.submitting = false;
           Swal.fire('Oops...', errResp?.error?.error?.message, 'error')
         });
+  }
+  submitEndpoint(fd) {
+    return this.reservationId ?
+        this.apiService.patch(`/api/v1/reservations/edit-reservation/${this.reservationId}`, fd) :
+        this.apiService.post(`/api/v1/reservations/express-interest`, fd)
   }
 
   displayErrors() {

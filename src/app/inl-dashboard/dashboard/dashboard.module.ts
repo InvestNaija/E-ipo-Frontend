@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TransactionsModule } from '../transactions/transactions.module';
 
 
 @NgModule({
@@ -29,7 +30,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCardModule,
     MatTableModule,
     MatMenuModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+
+    TransactionsModule
   ]
 })
 export class DashboardModule { }
