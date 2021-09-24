@@ -108,7 +108,6 @@ export class VerifyCscsComponent implements OnInit {
           Swal.fire({
             title: resp.message,
             icon: 'success',
-            text: 'Redirecting...Please wait',
             confirmButtonText: `Ok`,
             allowOutsideClick: false,
             allowEscapeKey: false

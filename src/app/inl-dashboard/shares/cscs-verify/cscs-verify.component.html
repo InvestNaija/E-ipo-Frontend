@@ -19,7 +19,9 @@
             <div class="row border-bottom py-3">
               <div class="col-12">
                 <div class="form-group col-md-12 inl-form-input">
-                  <input formControlName="cscsNo" class="form-control" type="text" placeholder="CSCS Number" />
+                  <input formControlName="cscsNo" class="form-control" type="text" placeholder="CSCS Number"
+                      matTooltip="Your CSCS Number is needed to complete this transaction"
+                      aria-label="Once the price is set, you will see it here" />
                   <span *ngIf="uiErrors.cscsNo">{{uiErrors.cscsNo}}</span>
                   <p class="pt-2 font-weight-bolder text-dark">{{cscsName}}</p>
                 </div>

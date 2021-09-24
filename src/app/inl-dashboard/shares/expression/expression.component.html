@@ -46,7 +46,9 @@
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Purchase Price ({{share?.currency}})</p>
                   <input formControlName="sharePrice" class="form-control" type="text"
-                    [placeholder]="myForm.get('sharePrice').value?'Purchase Price':'Pending Price Discovery'" />
+                    [placeholder]="myForm.get('sharePrice').value?'Purchase Price':'Pending Price Discovery'"
+                    [matTooltip]="myForm.get('sharePrice').value ? '' : 'Your BVN: You can dial *565*0# to get it'"
+                    aria-label="Your BVN goes here: You can dial *565*0# to get it" />
                   <span *ngIf="uiErrors.sharePrice">{{uiErrors.sharePrice}}</span>
                 </div>
               </div>

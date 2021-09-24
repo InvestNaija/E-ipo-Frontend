@@ -15,6 +15,7 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 // import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
     NgSelectModule,
     MatFormFieldModule, MatInputModule, MatIconModule
     , MatDatepickerModule, MatNativeDateModule//, MatMomentDateModule
+    , MatTooltipModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},

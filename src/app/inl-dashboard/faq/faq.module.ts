@@ -1,13 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SharesRoutingComponent } from './shares-routing.module';
-import { SharesComponent } from './shares/shares.component';
+import { FAQRoutingComponent } from './faq-routing.module';
+import { FAQComponent } from './faq/faq.component';
 
-import { ShareDetailComponent } from './share-detail/share-detail.component';
-import { ExpressionComponent } from './expression/expression.component';
-import { VerifyCscsComponent } from './cscs-verify/cscs-verify.component';
-import { CscsCreateComponent } from './cscs-create/cscs-create.component';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -24,14 +20,11 @@ import { SharedModule } from '@app/_shared/shared.module';
 
 @NgModule({
   declarations: [
-    SharesComponent,
-    ShareDetailComponent,
-    ExpressionComponent,
-    VerifyCscsComponent,CscsCreateComponent
+    FAQComponent,
   ],
   imports: [
     CommonModule,
-    SharesRoutingComponent,
+    FAQRoutingComponent,
 
     SharedModule,
     NgSelectModule,
@@ -47,4 +40,4 @@ import { SharedModule } from '@app/_shared/shared.module';
     MatPaginatorModule
   ]
 })
-export class SharesModule { }
+export class FAQModule { }

@@ -1,0 +1,36 @@
+<div class="container-fluid p-4">
+  <div class="row">
+    <div class="col-12">
+      <in-backbutton></in-backbutton>
+      <div class="page-title">
+        <h1>Frequently Asked Questions</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="col-10 mx-auto">
+                <div class="accordion" id="faqExample">
+                  <div class="card" *ngFor="let faq of faqs; let i = index">
+                    <div class="card-header p-2" id="{{'heading'+i}}">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" [class]="i==0?'':'collapsed'" type="button" data-toggle="collapse" [attr.data-target]="'#collapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+                          Q: {{faq['question']}}
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="{{'collapse' + i}}" class="collapse" [class]="i==0?'show':''" aria-labelledby="{{'heading'+i}}" data-parent="#faqExample">
+                        <div class="card-body">
+                            <b>Answer:</b>&nbsp;<span [innerHTML]="faq.answer"></span>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>

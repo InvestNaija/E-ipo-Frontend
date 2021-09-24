@@ -15,14 +15,18 @@
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email" *ngIf="myForm.get('bvn').value">BVN</label>
-        <input id="email" formControlName="bvn" class="form-control" type="text" placeholder="BVN" (keyup)="controlChanged('bvn')" />
+      <div class="form-group has-search">
+        <label for="bvn" *ngIf="myForm.get('bvn')?.value">BVN</label>
+        <!-- <span class="fa fa-2x fa-question-circle-o form-control-feedback"></span> -->
+        <mat-icon class="form-control-feedback" style="margin-right: 0.5rem; color: rgba(0, 0, 0, 0.54);"
+            matTooltip="Your BVN: You can dial *565*0# to get it"
+            aria-label="Your BVN goes here: You can dial *565*0# to get it">help_outline</mat-icon>
+        <input id="bvn" formControlName="bvn" class="form-control" type="text" placeholder="Enter your BVN" (keyup)="controlChanged('bvn')" />
         <span *ngIf="uiErrors.bvn != ''">{{uiErrors.bvn }}</span>
       </div>
       <div class="form-group has-search">
         <label for="dob" *ngIf="myForm.get('dob')?.value">Date Of Birth (DD/MM/YYYY)</label>
-        <mat-datepicker-toggle matSuffix [for]="picker" class="form-control-feedback"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="picker" class="form-control-feedback" style="margin: 0;"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <input formControlName="dob" class="form-control" placeholder="Date Of Birth (DD/MM/YYYY)" matInput [matDatepicker]="picker" (keyup)="controlChanged('dob')" (click)="picker.open()" />
         <span *ngIf="uiErrors.dob">{{uiErrors.dob }}</span>
