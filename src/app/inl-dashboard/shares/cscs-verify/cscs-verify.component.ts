@@ -63,9 +63,9 @@ export class VerifyCscsComponent implements OnInit {
       });
 
     this.myForm.get('cscsNo').valueChanges.pipe(
-      filter(res => res.length > 2)
-      , debounceTime(800), distinctUntilChanged()
-      , switchMap(data => {
+      // filter(res => res.length > 2),
+      debounceTime(800), distinctUntilChanged(),
+      switchMap(data => {
         this.cscsName = ''; this.submitting = true;
         return this.apiService.post(`/api/v1/mtn/customers/first-step`, {"cscsNo": data});
       })

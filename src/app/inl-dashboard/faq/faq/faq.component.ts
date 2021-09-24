@@ -1,23 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatPaginator } from '@angular/material/paginator';
-import { BehaviorSubject, of } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
-
-import { ApiService } from '@app/_shared/services/api.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { ApplicationContextService } from '@app/_shared/services/application-context.service';
-
-
-export interface PeriodicElement {
-  position: number;
-  course: string;
-  courseFee: number;
-  category: string;
-  scheduled: string;
-  published: string;
-  status: string;
-}
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'in-faq',
@@ -26,11 +7,7 @@ export interface PeriodicElement {
 })
 export class FAQComponent implements OnInit  {
 
-  constructor(
-    private router: Router,
-    private api: ApiService,
-    private appService: ApplicationContextService,
-  ) { }
+  constructor() { }
 
   faqs = [
     {question: 'What is the MTN Offer?', answer: 'MTN Group is desirous of selling down, over time, up to 2,814,830,718 shares in MTN Nigeria and reduce its shareholding in MTN Nigeria from 78.83% to 65%.'},

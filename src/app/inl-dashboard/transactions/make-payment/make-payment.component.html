@@ -31,11 +31,13 @@
               <div class="row" *ngIf="asset?.type !='bond'">
                 <div class="col-md-6">
                   <p class="text-muted font-weight-bold">Price per Unit</p>
-                  <p class="text-dark font-weight-bold text-uppercase">{{asset?.sharePrice | currency:asset?.currency:'symbol-narrow' }}</p>
+                  <p class="text-dark font-weight-bold">{{transaction?.unitsExpressed ? (asset?.sharePrice | currency:asset?.currency:'symbol-narrow') :'Pending Price Discovery' }}</p>
                 </div>
                 <div class="col-md-6">
                   <p class="text-muted font-weight-bold">Estimated Units</p>
-                  <p class="text-dark font-weight-bold">{{transaction?.unitsExpressed | number}}</p>
+                  <p class="text-dark font-weight-bold"
+                    [matTooltip]="share?.sharePrice ? '' : 'Once the price is set, you will see it here'"
+                    aria-label="Once the price is set, you will see it here">{{transaction?.unitsExpressed ? (transaction?.unitsExpressed | number) :'Pending Price Discovery'}}</p>
                 </div>
               </div>
               <div class="row">
