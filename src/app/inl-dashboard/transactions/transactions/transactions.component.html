@@ -99,6 +99,13 @@
             <span class="mobile-content">{{element.amount | currency:element.asset.currency:'symbol-narrow'}}</span>
           </mat-cell>
         </ng-container>
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span class="mobile-label">Date:</span>
+            <span class="mobile-content">{{element.createdAt | date}}</span>
+          </mat-cell>
+        </ng-container>
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
           <mat-cell *matCellDef="let element">
@@ -131,7 +138,7 @@
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onEdit(row)"></mat-row>
       </mat-table>
     </div>
     <div *ngIf="isLoading$ | async" class="mat-spinner-container">

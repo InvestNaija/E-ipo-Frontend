@@ -28,7 +28,7 @@ export interface PeriodicElement {
 })
 export class TransactionsComponent implements OnInit, AfterViewInit  {
 
-  displayedColumns: string[] = ['asset', 'price', 'unitsExpressed', 'unitsAlloted', 'amount', 'status', 'action'];
+  displayedColumns: string[] = ['asset', 'price', 'unitsExpressed', 'unitsAlloted', 'amount', 'createdAt', 'status', 'action'];
   dataSource: any = null;
   total_count = 0;
   pageSize = 10;
