@@ -81,7 +81,7 @@ export class InlLoginComponent implements OnInit {
       errResp => {
         this.APIResponse = false; this.submitting = false;
         // this.toastr.error(errResp?.error?.error?.message, errResp?.status+': '+errResp.statusText);
-        this.toastr.error(errResp?.error?.error?.message);
+        this.toastr.error(errResp?.error?.error?.message, 'Error!');
       });
   }
 
