@@ -78,7 +78,7 @@ export class MakePaymentComponent implements OnInit {
       reservationId: this.transaction.id,
       currency: this.asset.currency,
       reinvest: this.container['reinvest'],
-      redirectURL: getUrl .protocol + "//" + getUrl.host + "/dashboard/transactions"
+      redirectURL: getUrl.protocol + "//" + getUrl.host + "/dashboard/transactions"
     }
     // console.log(payload); return;
 
