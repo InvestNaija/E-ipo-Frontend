@@ -15,6 +15,8 @@
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-12">
       <div class="form-group has-search">
         <label for="bvn" *ngIf="myForm.get('bvn')?.value">BVN</label>
         <!-- <span class="fa fa-2x fa-question-circle-o form-control-feedback"></span> -->
@@ -31,6 +33,8 @@
         <input formControlName="dob" class="form-control" placeholder="Date Of Birth (DD/MM/YYYY)" matInput [matDatepicker]="picker" (keyup)="controlChanged('dob')" (click)="picker.open()" />
         <span *ngIf="uiErrors.dob">{{uiErrors.dob }}</span>
       </div>
+      </div>
+    </div>
         <!-- <div class="form-group">
           <label for="email" *ngIf="myForm.get('firstName').value">First Name</label>
           <input formControlName="firstName" class="form-control" type="text" placeholder="First Name" (keyup)="controlChanged('firstName')" />
@@ -41,11 +45,44 @@
           <input formControlName="lastName" class="form-control" type="text" placeholder="Surname" (keyup)="controlChanged('lastName')" />
           <span *ngIf="uiErrors.lastName != ''">{{uiErrors.lastName }}</span>
         </div> -->
-      <div class="form-group">
+      <!-- <div class="form-group">
         <button type="submit" class="auth-button">
           <span *ngIf="!submitting">Continue</span>
           <mat-spinner *ngIf="submitting"  [diameter]="30"></mat-spinner>
         </button>
+      </div> -->
+
+      <div class="row">
+        <div class="col-md-6">
+          <button type="submit" class="auth-button">
+            <span *ngIf="!submitting">Continue</span>
+            <mat-spinner *ngIf="submitting" [diameter]="30"></mat-spinner>
+          </button>
+        </div>
+        <div class="col-md-6">
+          <strong class="pull-right"><a routerLink="/auth/verify-otp" class="text-primary">Verify OTP</a></strong>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="text-center">
+            <a data-toggle="collapse" href="#collapseExample" role="button" class="text-primary" aria-expanded="false" aria-controls="collapseExample">
+              Why do we need your BVN?
+            </a>
+          </div>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body text-muted">
+              We only need to access some of your information.<br />
+              <ul>
+                <li>Names</li>
+                <li>Phone Number</li>
+                <li>Date of Birth</li>
+                <li>Email Address</li>
+              </ul>
+                  Your BVN does not give us access to your bank account or transactions
+            </div>
+          </div>
+        </div>
       </div>
     </form>
   </div>

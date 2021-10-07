@@ -110,23 +110,38 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
     delete fd.signature;
 
     if(!fd.accept) {
-      Swal.fire('', 'You need to accept the terms and conditions to proceed', 'warning');
+      this.toastr.error('You need to accept the terms and conditions to proceed', 'Error');
       this.APIResponse = false; this.submitting = false;
       return;
     }
-    this.apiService.post('/api/v1/auth/customers/signup', fd, false)
-      .subscribe(response => {
+    Swal.fire({
+      title: 'Notice!',
+      text: `The email address: ${this.myForm.get('email').value} will be used as your email `,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Proceed',
+      cancelButtonText: 'No, Let me Change'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.apiService.post('/api/v1/auth/customers/signup', fd, false)
+        .subscribe(response => {
+          this.APIResponse = false; this.submitting = false;
+          this.authService.signup$.next(response.data);
+          Swal.fire('', response?.message, 'success');
+          setTimeout(()=>{
+            this.router.navigate(['/auth/verify-otp']);
+          }, 2000)
+        },
+        errResp => {
+          this.APIResponse = false; this.submitting = false;
+          this.toastr.error(errResp?.error?.error?.message, errResp?.status+': '+errResp.statusText);
+        });
+      } else {
         this.APIResponse = false; this.submitting = false;
-        this.authService.signup$.next(response.data);
-        Swal.fire('', response?.message, 'success');
-        setTimeout(()=>{
-          this.router.navigate(['/auth/verify-otp']);
-        }, 2000)
-      },
-      errResp => {
-        this.APIResponse = false; this.submitting = false;
-        this.toastr.error(errResp?.error?.error?.message, errResp?.status+': '+errResp.statusText);
-      });
+      }
+    });
   }
 
 
