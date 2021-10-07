@@ -12,6 +12,7 @@ import { IShare } from '../../_models/share.model';
 import { ApiService } from '@app/_shared/services/api.service';
 import { CommonService } from '@app/_shared/services/common.service';
 import { BankPaymentComponent } from './bank-payment.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'in-make-payment',
@@ -35,6 +36,7 @@ export class MakePaymentComponent implements OnInit {
     private apiService: ApiService,
     public commonServices: CommonService,
     public dialog: MatDialog,
+    private toastr: ToastrService,
     @Inject(DOCUMENT) private document: Document
     ) { }
 
@@ -69,7 +71,7 @@ export class MakePaymentComponent implements OnInit {
     this.paying = true;
     if(!terms) {
       this.paying = false;
-      Swal.fire('', 'Terms and Condition needs to be accepted', 'warning');
+      this.toastr.error('Terms and Condition needs to be accepted', 'Error');
       return;
     }
     const getUrl = window.location;
