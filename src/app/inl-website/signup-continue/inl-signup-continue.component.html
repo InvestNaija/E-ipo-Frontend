@@ -90,10 +90,15 @@
               class="form-control" placeholder="Password" autocomplete="new-password" (keyup)="controlChanged('password')" />
           <span *ngIf="uiErrors.password != ''" class="text-danger">{{uiErrors.password }}</span>
         </div>
-        <div class="form-group">
+        <div class="form-group has-search">
           <label for="confirmPassword" *ngIf="myForm.get('confirmPassword')?.value">Confirm Password</label>
-          <input class="form-control" id="confirmPassword" formControlName="confirmPassword" type="password" placeholder="Confirm Password" (keyup)="controlChanged('confirmPassword')" />
-          <span *ngIf="uiErrors.confirmPassword" class="text-danger">{{uiErrors.confirmPassword }}</span>
+          <span (click)="container['fieldTextType2'] = !container['fieldTextType2']" class="fa form-control-feedback" [ngClass]="{
+            'fa-eye-slash': !container['fieldTextType2'],
+            'fa-eye': container['fieldTextType2']
+          }"></span>
+          <input class="form-control" formControlName="confirmPassword" [type]="container['fieldTextType2'] ? 'text' : 'password'"
+           placeholder="Confirm Password" (keyup)="controlChanged('confirmPassword')" />
+          <span *ngIf="uiErrors.confirmPassword != ''" class="text-danger">{{uiErrors.confirmPassword }}</span>
         </div>
         <div class="form-group">
           <input class="d-md-inline" formControlName="accept" type="checkbox" style="width: 40px;"/>
