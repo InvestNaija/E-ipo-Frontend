@@ -13,6 +13,7 @@ import { ApiService } from '@app/_shared/services/api.service';
 import { CommonService } from '@app/_shared/services/common.service';
 import { BankPaymentComponent } from './bank-payment.component';
 import { ToastrService } from 'ngx-toastr';
+import { ApplicationContextService } from '@app/_shared/services/application-context.service';
 
 @Component({
   selector: 'in-make-payment',
@@ -37,6 +38,7 @@ export class MakePaymentComponent implements OnInit {
     public commonServices: CommonService,
     public dialog: MatDialog,
     private toastr: ToastrService,
+    private appService: ApplicationContextService,
     @Inject(DOCUMENT) private document: Document
     ) { }
 
@@ -58,6 +60,10 @@ export class MakePaymentComponent implements OnInit {
         this.asset = asset.data;
         this.transaction = transaction.data;
 
+        const userDetail = this.appService.userInformation;
+        if(!userDetail.cscs && !userDetail.cscsRef)
+          this.appService.checkCSCS({id: this.transaction.id, asset: this.asset, goToTxns: true});
+
     })
   }
   openDialog() {
@@ -74,6 +80,7 @@ export class MakePaymentComponent implements OnInit {
       this.toastr.error('Terms and Condition needs to be accepted', 'Error');
       return;
     }
+    // this.router.navigateByUrl(`/dashboard/transactions`);
     const getUrl = window.location;
     const payload = {
       gateway: environment.gateway,

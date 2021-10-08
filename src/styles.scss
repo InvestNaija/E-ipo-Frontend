@@ -260,7 +260,7 @@ a.mat-menu-item {
 }
 
 .text-primary {
-  color: #b97231 !important;
+  color: #6AC3A3 !important;
 }
 
 .btn-danger {
@@ -282,7 +282,7 @@ a.mat-menu-item {
 
 .auth-button {
   border: none;
-  background-color: #06262D;
+  background-color: #00868D;
   border-radius: 10px;
   font-style: normal;
   font-weight: 500;
@@ -290,6 +290,9 @@ a.mat-menu-item {
   color: #fff;
   padding: 15px 35px;
   word-wrap: normal;
+  &:disabled {
+    background-color: #69B4BF;
+  }
 }
 
 

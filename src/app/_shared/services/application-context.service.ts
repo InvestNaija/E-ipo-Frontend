@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject, Subscription, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root'
 })
-export class ApplicationContextService {
+export class ApplicationContextService implements OnDestroy{
 
   private _userInformation;
   private _userInformationObs = new BehaviorSubject(1);
@@ -79,5 +79,8 @@ export class ApplicationContextService {
               this.router.navigateByUrl(`/dashboard/transactions/${txn.id}/${txn.asset.id}/make-payment`)
             }
           });
+  }
+  ngOnDestroy(): void {
+    if(this._userSub) this._userSub.unsubscribe();
   }
 }
