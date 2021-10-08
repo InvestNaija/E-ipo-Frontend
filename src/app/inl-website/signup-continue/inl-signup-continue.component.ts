@@ -116,7 +116,7 @@ export class InlSignupContinueComponent implements OnInit, OnDestroy {
     }
     Swal.fire({
       title: 'Notice!',
-      text: `The email address: ${this.myForm.get('email').value} will be used as your email `,
+      html: `The email address: <b style="color:red;">${this.myForm.get('email').value}</b> will be used as your email `,
       icon: 'info',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
