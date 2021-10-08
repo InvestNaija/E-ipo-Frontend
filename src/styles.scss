@@ -290,6 +290,9 @@ a.mat-menu-item {
   color: #fff;
   padding: 15px 35px;
   word-wrap: normal;
+  &:disabled {
+    background-color: #69B4BF;
+  }
 }
 
 

@@ -40,7 +40,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <button type="submit" class="auth-button w-100">
+            <button type="submit" class="auth-button w-100" [disabled]="submitting">
               <span *ngIf="!submitting">Login</span>
               <mat-spinner *ngIf="submitting" class="mx-auto" color="accent" [diameter]="30"></mat-spinner>
             </button>
