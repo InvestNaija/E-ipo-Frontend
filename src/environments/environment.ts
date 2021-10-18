@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   gateway: 'flutterwave',
-  apiUrl: 'https://learningmicrosite.azurewebsites.net'
+  apiUrl: 'https://learningmicrosite.azurefd.net'
 };
 
 /*
