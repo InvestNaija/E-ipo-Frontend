@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { ApiService } from '@app/_shared/services/api.service';
@@ -27,10 +27,29 @@ export class PasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
-      oldPassword: [null, [Validators.required, Validators.minLength(6)]],
-      newPassword: [null, [Validators.required, Validators.minLength(6)]],
+      oldPassword: [null, [
+        Validators.required,
+        Validators.minLength(6), Validators.maxLength(15),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.oneDigit), {'oneDigit': ''}),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.oneLowerCase), {'oneLowerCase': ''}),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.oneUpperCase), {'oneUpperCase': ''}),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.specialChar), {'specialChar': ''}),
+      ]],
+      newPassword: [null, [
+        Validators.required,
+        Validators.minLength(6), Validators.maxLength(15),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.oneDigit), {'oneDigit': ''}),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.oneLowerCase), {'oneLowerCase': ''}),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.oneUpperCase), {'oneUpperCase': ''}),
+        this.commonServices.regexValidator(new RegExp(this.commonServices.specialChar), {'specialChar': ''}),
+      ]],
       confirmNewPassword: [null, [Validators.required, Validators.minLength(6)]],
     },{validators: this.commonServices.mustMatch('newPassword', 'confirmNewPassword')});
+  }
+
+  controlChanged(ctrlName: string) {
+    this.errors = this.commonServices.controlnvalid(this.myForm.get(ctrlName) as FormControl);
+    this.displayErrors();
   }
 
   onSubmit() {
@@ -39,9 +58,6 @@ export class PasswordComponent implements OnInit {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
       this.displayErrors();
-      // this.formErrors
-      // let displayErrors: any;
-      // {this.formErrors, this.uiErrors} = this.commonServices.displayErrors(this.formErrors, ValidationMessages, this.errors, this.uiErrors);
       this.submitting = false;
       return;
     }
