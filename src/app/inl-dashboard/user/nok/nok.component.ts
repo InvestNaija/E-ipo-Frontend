@@ -18,7 +18,11 @@ export class NoKComponent implements OnInit {
   formErrors = FormErrors;
   uiErrors = FormErrors;
   validationMessages = ValidationMessages;
-  container = {};
+  container = {
+    relationship: [
+      {name: 'Son'},{name: 'Daughter'},{name: 'Wife'},{name: 'Husband'},{name: 'In-law'},{name: 'Other'},
+    ]
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -31,11 +35,17 @@ export class NoKComponent implements OnInit {
 
     this.commonServices.isLoading$.subscribe(loading => {
       this.myForm = this.fb.group({
-        name: [this.appContext.userInformation?.nextOfKinName, [Validators.required]],
+        name: [this.appContext.userInformation?.nextOfKinName, [Validators.required, Validators.maxLength(50),]],
         relationship: [this.appContext.userInformation?.nextOfKinRelationship, [Validators.required]],
-        address: [this.appContext.userInformation?.nextOfKinAddress, [Validators.required]],
-        phoneNumber: [this.appContext.userInformation?.nextOfKinPhoneNumber, [Validators.required]],
-        email: [this.appContext.userInformation?.nextOfKinEmail, [Validators.required, Validators.pattern(this.commonServices.email)]],
+        address: [this.appContext.userInformation?.nextOfKinAddress, [Validators.required, Validators.maxLength(100),]],
+        phoneNumber: [this.appContext.userInformation?.nextOfKinPhoneNumber, [
+          Validators.required, Validators.maxLength(12),
+          this.commonServices.regexValidator(new RegExp(this.commonServices.phone), {'invalid': ''}),
+        ]],
+        email: [this.appContext.userInformation?.nextOfKinEmail, [
+          Validators.required,
+          this.commonServices.regexValidator(new RegExp(this.commonServices.email), {'invalid': ''}),
+        ]],
       });
     })
   }

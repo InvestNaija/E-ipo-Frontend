@@ -48,7 +48,7 @@ export class ExpressionComponent implements OnInit {
       type: [{ value: '', disabled: true }, [Validators.required]],
       sharePrice: [{ value: '', disabled: true }, [Validators.required]],
       units: ['', [Validators.required, Validators.min(1)]],
-      amount: ['', [Validators.required]],
+      amount: ['', [Validators.required, Validators.max(1000000000)]],
     });
 
     this.aRoute.paramMap.pipe(

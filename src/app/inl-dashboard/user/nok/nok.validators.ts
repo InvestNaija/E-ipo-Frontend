@@ -1,19 +1,23 @@
 export const ValidationMessages  = {
   'name' : {
     'required': 'Name is required',
+    'maxlength': 'Name cannot be longer than 50 characters'
   },
   'relationship' : {
     'required': 'Relationship is required',
   },
   'address' : {
     'required': 'Address is required',
+    'maxlength': 'Name cannot be longer than 100 characters'
   },
   'phoneNumber' : {
     'required': 'Phone Number is required',
+    'invalid': 'Should be a valid phone number',
+    'maxlength': 'Phone cannot be longer than 12 characters'
   },
   'email' : {
     'required': 'Email is required',
-    'pattern': 'The email field must be a valid email',
+    'invalid': 'The email field must be a valid email',
   },
 };
 export let FormErrors = {

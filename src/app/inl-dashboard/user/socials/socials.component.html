@@ -8,35 +8,35 @@
         <div class="form-group col-md-6">
           <label for="inputEmail4">Personal Website</label>
           <input formControlName="website" type="text" class="form-control" placeholder="Personal Website">
-          <span *ngIf="uiErrors.website">{{uiErrors.website}}</span>
+          <span *ngIf="uiErrors.website != ''" class="text-danger">{{uiErrors.website}}</span>
         </div>
         <div class="form-group col-md-6">
         </div>
         <div class="form-group col-md-6">
           <label for="inputAddress">Twitter</label>
           <input formControlName="twitter" type="text" class="form-control" placeholder="Twitter">
-          <span *ngIf="uiErrors.twitter">{{uiErrors.twitter}}</span>
+          <span *ngIf="uiErrors.twitter != ''" class="text-danger">{{uiErrors.twitter}}</span>
         </div>
         <div class="form-group col-md-6">
         </div>
         <div class="form-group col-md-6">
           <label for="inputAddress">Facebook</label>
           <input formControlName="facebook" type="text" class="form-control" placeholder="Facebook">
-          <span *ngIf="uiErrors.facebook">{{uiErrors.facebook}}</span>
+          <span *ngIf="uiErrors.facebook != ''" class="text-danger">{{uiErrors.facebook}}</span>
         </div>
         <div class="form-group col-md-6">
         </div>
         <div class="form-group col-md-6">
           <label for="inputEmail4">LinkedIn</label>
           <input formControlName="linkedIn" type="text" class="form-control" placeholder="LinkedIn">
-          <span *ngIf="uiErrors.linkedIn">{{uiErrors.linkedIn}}</span>
+          <span *ngIf="uiErrors.linkedIn != ''" class="text-danger">{{uiErrors.linkedIn}}</span>
         </div>
         <div class="form-group col-md-6">
         </div>
         <div class="form-group col-md-6">
           <label for="inputEmail4">Youtube</label>
           <input formControlName="youtube" type="text" class="form-control" placeholder="Youtube">
-          <span *ngIf="uiErrors.youtube">{{uiErrors.youtube}}</span>
+          <span *ngIf="uiErrors.youtube != ''" class="text-danger">{{uiErrors.youtube}}</span>
         </div>
         <div class="form-group col-md-6">
         </div>

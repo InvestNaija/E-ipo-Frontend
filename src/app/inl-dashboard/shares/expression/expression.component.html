@@ -56,6 +56,7 @@
                 <div class="form-group col-md-12 inl-form-input">
                   <p class="text-muted font-weight-bold">Amount</p>
                   <input formControlName="amount" class="form-control" type="number" [min]="share?.anticipatedMinPrice"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     (keyup)="amountChanged('amount')" placeholder="Amount" />
                   <span *ngIf="uiErrors.amount">{{uiErrors.amount}}</span>
                   <span *ngIf="errors['amount']?.min">Amount cannot be less than

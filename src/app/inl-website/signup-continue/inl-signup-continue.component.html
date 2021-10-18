@@ -100,6 +100,11 @@
           <span *ngIf="uiErrors.confirmPassword != ''" class="text-danger">{{uiErrors.confirmPassword }}</span>
         </div>
         <div class="form-group">
+          <input class="d-md-inline" formControlName="bypassDND" type="checkbox" style="width: 40px;"/>
+          <span>BypassDND
+          </span>
+        </div>
+        <div class="form-group">
           <input class="d-md-inline" formControlName="accept" type="checkbox" style="width: 40px;"/>
           <span>I have read, understand and accept the
             <a href="https://offerings.chapelhilldenham.com/terms-and-conditions/" target="_blank">

@@ -1,18 +1,18 @@
 export const ValidationMessages  = {
   'facebook' : {
-    'pattern': 'Pattern does not match a URL',
+    'pattern': 'Pattern does not match a URL; e.g http://example.com',
   },
   'linkedIn' : {
-    'pattern': 'Pattern does not match a URL',
+    'pattern': 'Pattern does not match a URL; e.g http://example.com',
   },
   'twitter' : {
-    'pattern': 'Pattern does not match a URL',
+    'pattern': 'Pattern does not match a URL; e.g http://example.com',
   },
   'website' : {
-    'pattern': 'Pattern does not match a URL',
+    'pattern': 'Pattern does not match a URL; e.g http://example.com',
   },
   'youtube' : {
-    'pattern': 'Pattern does not match a URL',
+    'pattern': 'Pattern does not match a URL; e.g http://example.com',
   },
 };
 export let FormErrors = {

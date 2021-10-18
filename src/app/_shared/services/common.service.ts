@@ -11,10 +11,12 @@ import { ApiService } from './api.service';
 export class CommonService {
 
   email = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  url = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+  url = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
   oneDigit = /\d/;
   oneLowerCase = /[a-z]/;
   oneUpperCase = /[A-Z]/;
+  specialChar = /[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
+  phone = /^([0-9\(\)\/\+ \-]*)$/;
 
   private loadingSubject = new BehaviorSubject<boolean>(null);
   isLoading$ = this.loadingSubject.asObservable();

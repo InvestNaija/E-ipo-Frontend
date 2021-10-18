@@ -42,7 +42,11 @@ export class InlLoginComponent implements OnInit {
       email: [null, [Validators.required, Validators.pattern(this.commonServices.email)]],
       password: [null, [
           Validators.required,
-          Validators.minLength(6)
+          Validators.minLength(6), Validators.maxLength(15),
+          this.commonServices.regexValidator(new RegExp(this.commonServices.oneDigit), {'oneDigit': ''}),
+          this.commonServices.regexValidator(new RegExp(this.commonServices.oneLowerCase), {'oneLowerCase': ''}),
+          this.commonServices.regexValidator(new RegExp(this.commonServices.oneUpperCase), {'oneUpperCase': ''}),
+          this.commonServices.regexValidator(new RegExp(this.commonServices.specialChar), {'specialChar': ''}),
         ]
       ],
       rememberMe: [null ],
@@ -80,8 +84,11 @@ export class InlLoginComponent implements OnInit {
       },
       errResp => {
         this.APIResponse = false; this.submitting = false;
-        // this.toastr.error(errResp?.error?.error?.message, errResp?.status+': '+errResp.statusText);
-        this.toastr.error(errResp?.error?.error?.message, 'Error!');
+        if(errResp?.status === 503) {
+          Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
+        } else {
+          this.toastr.error(errResp.error.error.message, errResp.status+': '+ errResp.statusText);
+        }
       });
   }
 
