@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { ApiService } from '@app/_shared/services/api.service';
@@ -38,16 +38,17 @@ export class SocialsComponent implements OnInit {
       });
     })
   }
+  controlChanged(ctrlName: string) {
+    this.errors = this.commonServices.controlnvalid(this.myForm.get(ctrlName) as FormControl);
+    this.displayErrors();
+  }
+
   onSubmit() {
     this.container['submitting'] = true;
     if (this.myForm.invalid) {
       this.uiErrors = JSON.parse(JSON.stringify(this.formErrors))
       this.errors = this.commonServices.findInvalidControlsRecursive(this.myForm);
-      Object.keys(this.errors).forEach((control) => {
-        Object.keys(this.errors[control]).forEach(error => {
-          this.uiErrors[control] = ValidationMessages[control][error];
-        })
-      })
+      this.displayErrors();
       this.container['submitting'] = false;
       return;
     }
@@ -63,4 +64,14 @@ export class SocialsComponent implements OnInit {
       });
   }
 
+  displayErrors() {
+    Object.keys(this.formErrors).forEach((control) => {
+      this.formErrors[control] = '';
+    });
+    Object.keys(this.errors).forEach((control) => {
+      Object.keys(this.errors[control]).forEach(error => {
+        this.uiErrors[control] = ValidationMessages[control][error];
+      })
+    });
+  }
 }

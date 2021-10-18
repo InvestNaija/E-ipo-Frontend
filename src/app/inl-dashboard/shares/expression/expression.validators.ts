@@ -11,6 +11,7 @@ export const ValidationMessages  = {
   },
   'amount' : {
     'required': 'Amount is required.',
+    'max': 'Maximum amount is 1,000,000,000',
   }
 };
 export let FormErrors = {
