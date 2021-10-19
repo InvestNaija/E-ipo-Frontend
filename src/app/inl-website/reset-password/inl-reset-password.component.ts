@@ -42,10 +42,11 @@ export class InlResetPasswordComponent implements OnInit {
       this.myForm = this.fb.group({
         password: [null, [
             Validators.required,
-            Validators.minLength(6),
+            Validators.minLength(6), Validators.maxLength(15),
             this.commonServices.regexValidator(new RegExp(this.commonServices.oneDigit), {'oneDigit': ''}),
             this.commonServices.regexValidator(new RegExp(this.commonServices.oneLowerCase), {'oneLowerCase': ''}),
             this.commonServices.regexValidator(new RegExp(this.commonServices.oneUpperCase), {'oneUpperCase': ''}),
+            this.commonServices.regexValidator(new RegExp(this.commonServices.specialChar), {'specialChar': ''}),
           ]
         ],
         confirmPassword: [null, Validators.required],
