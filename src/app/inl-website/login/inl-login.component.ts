@@ -87,7 +87,8 @@ export class InlLoginComponent implements OnInit {
         if(errResp?.status === 503) {
           Swal.fire('Oops...', 'Service is currently unavailable. Please try again later', 'error');
         } else {
-          this.toastr.error(errResp.error.error.message, errResp.status+': '+ errResp.statusText);
+          this.toastr.error(errResp.error.error.message, 'Error!');
+          // this.toastr.error(errResp.error.error.message, errResp.status+': '+ errResp.statusText);
         }
       });
   }
